@@ -47,7 +47,7 @@ defmodule ElixirDashboard.PerformanceLive.Endpoints do
     <div class="container mx-auto p-6">
       <div class="mb-6">
         <h1 class="text-3xl font-bold text-gray-900 mb-2">
-          {@app_name} - Slow API Endpoints
+          <%= @app_name %> - Slow API Endpoints
         </h1>
         <p class="text-sm text-gray-600 mb-4">
           Showing the 100 slowest endpoints recorded since the server started (threshold: 100ms).

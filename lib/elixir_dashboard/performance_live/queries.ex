@@ -36,7 +36,7 @@ defmodule ElixirDashboard.PerformanceLive.Queries do
     ~H"""
     <div class="container mx-auto p-6">
       <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">{@app_name} - Slow SQL Queries</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @app_name %> - Slow SQL Queries</h1>
         <p class="text-sm text-gray-600 mb-4">
           Showing the 100 slowest queries recorded since the server started (threshold: 50ms).
         </p>
