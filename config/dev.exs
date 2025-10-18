@@ -3,6 +3,23 @@ import Config
 # Set the environment
 config :elixir_dashboard, :env, :dev
 
+# Configure the demo database
+config :elixir_dashboard, ElixirDashboardWeb.Repo,
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "elixir_dashboard_dev",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+
+# Configure Ecto repos
+config :elixir_dashboard, ecto_repos: [ElixirDashboardWeb.Repo]
+
+# Configure repo telemetry prefix for monitoring
+config :elixir_dashboard,
+  repo_prefixes: [[:elixir_dashboard_web, :repo]]
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 config :elixir_dashboard, ElixirDashboardWeb.Endpoint,

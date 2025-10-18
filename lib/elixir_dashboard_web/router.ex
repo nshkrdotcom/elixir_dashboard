@@ -20,6 +20,19 @@ defmodule ElixirDashboardWeb.Router do
     get "/", PageController, :home
   end
 
+  # Demo/testing endpoints (only in dev)
+  if Mix.env() == :dev do
+    scope "/demo", ElixirDashboardWeb do
+      pipe_through :api
+
+      get "/slow_cpu", DemoController, :slow_cpu
+      get "/slow_query", DemoController, :slow_query
+      get "/complex_query", DemoController, :complex_query
+      get "/multiple_queries", DemoController, :multiple_queries
+      get "/random_slow", DemoController, :random_slow
+    end
+  end
+
   # Development-only routes for performance monitoring
   if Mix.env() == :dev do
     scope "/dev/performance" do

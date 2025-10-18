@@ -36,7 +36,7 @@ defmodule ElixirDashboard.MixProject do
   def application do
     [
       mod: application_mod(Mix.env()),
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :crypto]
     ]
   end
 
@@ -64,6 +64,10 @@ defmodule ElixirDashboard.MixProject do
       {:dns_cluster, "~> 0.1.1", only: [:dev, :test]},
       {:bandit, "~> 1.0", only: [:dev, :test]},
       {:floki, ">= 0.30.0", only: :test},
+
+      # Database for demo/dev app (for real slow query testing)
+      {:ecto_sql, "~> 3.10", only: [:dev, :test]},
+      {:postgrex, "~> 0.17", only: [:dev, :test]},
 
       # Development and testing
       {:ex_doc, "~> 0.31", only: :dev, runtime: false},
@@ -177,7 +181,9 @@ defmodule ElixirDashboard.MixProject do
   defp aliases do
     [
       setup: ["deps.get"],
-      "dev.server": ["phx.server"]
+      "dev.server": ["phx.server"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"]
     ]
   end
 end

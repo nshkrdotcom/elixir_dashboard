@@ -3,15 +3,20 @@ defmodule ElixirDashboard.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      ElixirDashboardWeb.Telemetry,
-      {DNSCluster, query: Application.get_env(:elixir_dashboard, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: ElixirDashboard.PubSub},
-      # Start the Performance Monitor
-      ElixirDashboardWeb.PerformanceMonitor.Supervisor,
-      # Start the Endpoint (http/https)
-      ElixirDashboardWeb.Endpoint
-    ]
+    children =
+      [
+        ElixirDashboardWeb.Telemetry,
+        {DNSCluster,
+         query: Application.get_env(:elixir_dashboard, :dns_cluster_query) || :ignore},
+        {Phoenix.PubSub, name: ElixirDashboard.PubSub},
+        # Start the Performance Monitor
+        ElixirDashboardWeb.PerformanceMonitor.Supervisor
+      ] ++
+        repo_children() ++
+        [
+          # Start the Endpoint (http/https)
+          ElixirDashboardWeb.Endpoint
+        ]
 
     # Attach telemetry handlers only in dev
     if Application.get_env(:elixir_dashboard, :env) == :dev do
@@ -28,5 +33,14 @@ defmodule ElixirDashboard.Application do
   def config_change(changed, _new, removed) do
     ElixirDashboardWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  # Only start Repo in dev/test for demo purposes
+  defp repo_children do
+    if Application.get_env(:elixir_dashboard, :env) in [:dev, :test] do
+      [ElixirDashboardWeb.Repo]
+    else
+      []
+    end
   end
 end
