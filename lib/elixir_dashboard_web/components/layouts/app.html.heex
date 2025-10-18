@@ -1,0 +1,5 @@
+<main class="min-h-screen">
+  <.flash :if={@flash} kind={:info} flash={@flash} />
+  <.flash :if={@flash} kind={:error} flash={@flash} />
+  <%= @inner_content %>
+</main>

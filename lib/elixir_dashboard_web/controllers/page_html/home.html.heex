@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elixir Dashboard - Performance Monitoring</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+  </head>
+  <body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center px-4">
+      <div class="max-w-2xl w-full">
+        <div class="bg-white rounded-lg shadow-xl p-8">
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">
+            Elixir Dashboard
+          </h1>
+          <p class="text-lg text-gray-600 mb-8">
+            Performance monitoring for your Phoenix application
+          </p>
+
+          <div class="space-y-4">
+            <a
+              href="/dev/performance/endpoints"
+              class="block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
+            >
+              View Slow Endpoints
+            </a>
+
+            <a
+              href="/dev/performance/queries"
+              class="block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
+            >
+              View Slow Queries
+            </a>
+
+            <a
+              href="/dev/dashboard"
+              class="block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
+            >
+              Phoenix LiveDashboard
+            </a>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Features</h2>
+            <ul class="list-disc list-inside text-gray-600 space-y-1">
+              <li>Real-time monitoring of slow API endpoints (>100ms)</li>
+              <li>Track slow SQL queries (>50ms)</li>
+              <li>Correlate queries with their originating endpoints</li>
+              <li>Auto-refresh every 5 seconds</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
