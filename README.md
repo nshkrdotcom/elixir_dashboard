@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/elixir_dashboard.svg" alt="Elixir Dashboard Logo" width="200"/>
+</div>
+
 # ElixirDashboard
 
 [![Hex.pm](https://img.shields.io/hexpm/v/elixir_dashboard.svg)](https://hex.pm/packages/elixir_dashboard)
