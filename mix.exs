@@ -2,7 +2,7 @@ defmodule ElixirDashboard.MixProject do
   use Mix.Project
 
   @version "0.1.0"
-  @source_url "https://github.com/yourorg/elixir_dashboard"
+  @source_url "https://github.com/nshkrdotcom/elixir_dashboard"
 
   def project do
     [
@@ -16,8 +16,20 @@ defmodule ElixirDashboard.MixProject do
       description: description(),
       package: package(),
       docs: docs(),
-      name: "Elixir Dashboard",
-      source_url: @source_url
+      name: "ElixirDashboard",
+      source_url: @source_url,
+      homepage_url: @source_url,
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
+      dialyzer: [
+        plt_add_apps: [:ex_unit],
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      ]
     ]
   end
 
@@ -53,8 +65,11 @@ defmodule ElixirDashboard.MixProject do
       {:bandit, "~> 1.0", only: [:dev, :test]},
       {:floki, ">= 0.30.0", only: :test},
 
-      # Documentation
-      {:ex_doc, "~> 0.31", only: :dev, runtime: false}
+      # Development and testing
+      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev], runtime: false},
+      {:excoveralls, "~> 0.18", only: :test}
     ]
   end
 
@@ -66,20 +81,95 @@ defmodule ElixirDashboard.MixProject do
 
   defp package do
     [
+      name: "elixir_dashboard",
+      description: description(),
+      files:
+        ~w(lib .formatter.exs mix.exs README.md INTEGRATION_GUIDE.md SETUP.md LICENSE CHANGELOG.md),
       licenses: ["MIT"],
       links: %{
-        "GitHub" => @source_url
+        "GitHub" => @source_url,
+        "Online documentation" => "https://hexdocs.pm/elixir_dashboard",
+        "Integration Guide" => "https://hexdocs.pm/elixir_dashboard/INTEGRATION_GUIDE.html",
+        "Changelog" => "#{@source_url}/blob/master/CHANGELOG.md"
       },
-      files: ~w(lib .formatter.exs mix.exs README.md LICENSE CHANGELOG.md)
+      maintainers: ["nshkrdotcom"],
+      exclude_patterns: [
+        "priv/plts",
+        ".DS_Store"
+      ]
     ]
   end
 
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "SETUP.md"],
+      name: "ElixirDashboard",
       source_ref: "v#{@version}",
-      source_url: @source_url
+      source_url: @source_url,
+      homepage_url: @source_url,
+      extras: [
+        "README.md",
+        "INTEGRATION_GUIDE.md",
+        "LIBRARY_USAGE.md",
+        "SETUP.md",
+        "CHANGELOG.md"
+      ],
+      groups_for_extras: [
+        "Getting Started": ["README.md", "INTEGRATION_GUIDE.md"],
+        Advanced: ["LIBRARY_USAGE.md", "SETUP.md"],
+        "Release Notes": ["CHANGELOG.md"]
+      ],
+      groups_for_modules: [
+        "Core API": [
+          ElixirDashboard,
+          ElixirDashboard.PerformanceMonitor
+        ],
+        "Performance Monitoring": [
+          ElixirDashboard.PerformanceMonitor.Store,
+          ElixirDashboard.PerformanceMonitor.TelemetryHandler,
+          ElixirDashboard.PerformanceMonitor.Supervisor
+        ],
+        "LiveView Components": [
+          ElixirDashboard.PerformanceLive.Endpoints,
+          ElixirDashboard.PerformanceLive.Queries
+        ]
+      ],
+      before_closing_head_tag: fn
+        :html ->
+          """
+          <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+          <script>
+            let initialized = false;
+
+            window.addEventListener("exdoc:loaded", () => {
+              if (!initialized) {
+                mermaid.initialize({
+                  startOnLoad: false,
+                  theme: document.body.className.includes("dark") ? "dark" : "default"
+                });
+                initialized = true;
+              }
+
+              let id = 0;
+              for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+                const preEl = codeEl.parentElement;
+                const graphDefinition = codeEl.textContent;
+                const graphEl = document.createElement("div");
+                const graphId = "mermaid-graph-" + id++;
+                mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+                  graphEl.innerHTML = svg;
+                  bindFunctions?.(graphEl);
+                  preEl.insertAdjacentElement("afterend", graphEl);
+                  preEl.remove();
+                });
+              }
+            });
+          </script>
+          """
+
+        _ ->
+          ""
+      end
     ]
   end
 

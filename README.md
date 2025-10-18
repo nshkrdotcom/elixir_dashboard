@@ -1,15 +1,31 @@
-# Elixir Dashboard
-
-A Phoenix LiveView performance monitoring dashboard for tracking slow endpoints and database queries during development.
+# ElixirDashboard
 
 [![Hex.pm](https://img.shields.io/hexpm/v/elixir_dashboard.svg)](https://hex.pm/packages/elixir_dashboard)
 [![Documentation](https://img.shields.io/badge/docs-hexpm-blue.svg)](https://hexdocs.pm/elixir_dashboard)
+[![License](https://img.shields.io/hexpm/l/elixir_dashboard.svg)](LICENSE)
 
-## Two Ways to Use
+**A Phoenix LiveView performance monitoring dashboard for tracking slow endpoints and database queries during development.**
 
-### 1. 📦 As a Library in Your Phoenix App (Recommended)
+ElixirDashboard is a lightweight, zero-configuration monitoring tool that helps you identify performance bottlenecks in your Phoenix application by tracking slow HTTP endpoints and database queries in real-time.
 
-Add monitoring to your existing Phoenix application:
+## Features
+
+- 🚀 **Zero Configuration** - Works out of the box with sensible defaults
+- 📊 **Real-time Monitoring** - LiveView dashboards with auto-refresh
+- 🎯 **Dual Purpose** - Use as a library in your app OR run standalone
+- 🔍 **Request Correlation** - See which endpoints triggered slow queries
+- 🎨 **Color-coded Metrics** - Visual performance indicators
+- ⚡ **Lightweight** - Minimal dependencies, in-memory storage
+- 🛡️ **Development-Only** - Automatically disabled in production
+- 🔧 **Fully Configurable** - Customize thresholds, limits, and intervals
+
+## Quick Start
+
+### As a Library (Recommended)
+
+Add to your Phoenix application in 3 simple steps:
+
+#### 1. Add Dependency
 
 ```elixir
 # mix.exs
@@ -20,121 +36,184 @@ def deps do
 end
 ```
 
-**Quick Integration (3 steps):**
-
-1. Add supervisor to your application.ex
-2. Attach telemetry handlers
-3. Add routes to your router
-
-See [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) for detailed instructions.
-
-### 2. 🚀 As a Standalone Demo Application
-
-Run the dashboard standalone to explore its features:
-
 ```bash
-git clone https://github.com/yourorg/elixir_dashboard.git
-cd elixir_dashboard
 mix deps.get
-./start.sh
 ```
 
-Visit http://localhost:4000
+#### 2. Add to Supervision Tree
 
-## Features
+```elixir
+# lib/my_app/application.ex
+defmodule MyApp.Application do
+  use Application
 
-- **Real-time Endpoint Monitoring**: Track slow API endpoints (>100ms threshold)
-- **SQL Query Tracking**: Monitor slow database queries (>50ms threshold)
-- **Request Correlation**: See which endpoints triggered specific queries
-- **Auto-refresh**: LiveViews update every 5 seconds
-- **Color-coded Performance**: Visual indicators for severity levels
-- **Zero Configuration**: Works out of the box with sensible defaults
-- **Development-Only**: Automatically disabled in production
+  def start(_type, _args) do
+    children = [
+      MyApp.Repo,
+      {Phoenix.PubSub, name: MyApp.PubSub},
+      # Add ElixirDashboard
+      ElixirDashboard.PerformanceMonitor.Supervisor,
+      MyAppWeb.Endpoint
+    ]
 
-## Screenshots
+    # Attach telemetry handlers (development only)
+    if Mix.env() == :dev do
+      ElixirDashboard.PerformanceMonitor.TelemetryHandler.attach()
+    end
 
-### Slow Endpoints Dashboard
-View your slowest API endpoints with color-coded duration indicators.
+    opts = [strategy: :one_for_one, name: MyApp.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+end
+```
 
-### Slow Queries Dashboard
-Track database query performance and see which requests triggered them.
+#### 3. Add Routes
 
-## How It Works
+```elixir
+# lib/my_app_web/router.ex
+if Mix.env() == :dev do
+  scope "/dev" do
+    pipe_through :browser
 
-ElixirDashboard uses Phoenix's built-in `telemetry` events to capture performance metrics:
+    live "/performance/endpoints", ElixirDashboard.PerformanceLive.Endpoints, :index
+    live "/performance/queries", ElixirDashboard.PerformanceLive.Queries, :index
+  end
+end
+```
 
-1. **Phoenix Endpoint Events** (`[:phoenix, :endpoint, :stop]`) - HTTP request timings
-2. **Ecto Query Events** (`[app, :repo, :query]`) - Database query timings
-
-Data is stored in-memory via a GenServer, keeping only the top N slowest entries for each category (default: 100).
-
-## Configuration
-
-All configuration is optional with sensible defaults:
+#### 4. Configure (Optional)
 
 ```elixir
 # config/dev.exs
 config :elixir_dashboard,
-  # Maximum items to keep in memory
+  # Maximum items to keep in memory (default: 100)
   max_items: 100,
-  # Endpoint duration threshold (ms)
+  # Endpoint threshold in milliseconds (default: 100)
   endpoint_threshold_ms: 100,
-  # Query duration threshold (ms)
+  # Query threshold in milliseconds (default: 50)
   query_threshold_ms: 50,
-  # Auto-refresh interval (ms)
+  # Auto-refresh interval in milliseconds (default: 5000)
   refresh_interval_ms: 5000,
   # Ecto repo telemetry prefixes to monitor
   repo_prefixes: [[:my_app, :repo]]
 ```
 
-## Integration with New Relic (Optional)
+**Important:** Set `repo_prefixes` to match your Ecto repo module name.
 
-This tool was designed to complement the New Relic Elixir Agent. It:
+That's it! Visit `http://localhost:4000/dev/performance/endpoints` 🎉
 
-- ✅ Uses the same telemetry events New Relic monitors
-- ✅ Does not interfere with New Relic's data collection
-- ✅ Provides immediate, local feedback during development
-- ✅ Works independently - no New Relic configuration required
-
-## Architecture
-
-```
-ElixirDashboard
-├── PerformanceMonitor (Core library)
-│   ├── Store (GenServer for data storage)
-│   ├── TelemetryHandler (Telemetry event handlers)
-│   └── Supervisor
-└── PerformanceLive (LiveView components)
-    ├── Endpoints (Slow endpoints dashboard)
-    └── Queries (Slow queries dashboard)
-```
-
-## Development
-
-To work on the dashboard itself:
+### As a Standalone App (Demo/Development)
 
 ```bash
-# Install dependencies
+git clone https://github.com/nshkrdotcom/elixir_dashboard.git
+cd elixir_dashboard
 mix deps.get
-
-# Run tests
-mix test
-
-# Start the demo server
 ./start.sh
+```
 
-# Or manually
-PHX_SERVER=true iex -S mix phx.server
+Visit `http://localhost:4000`
 
-# Generate docs
-mix docs
+## What You Get
+
+### Slow Endpoints Dashboard (`/dev/performance/endpoints`)
+
+Track your slowest HTTP endpoints with real-time updates:
+
+- Duration in milliseconds
+- HTTP method and path
+- Timestamp
+- Color-coded severity (green → yellow → orange → red)
+- Auto-refresh every 5 seconds
+- One-click data clearing
+
+### Slow Queries Dashboard (`/dev/performance/queries`)
+
+Monitor database performance:
+
+- Query duration
+- Full SQL text
+- Query parameters
+- Originating endpoint (request correlation)
+- Timestamp
+- Color-coded severity
+
+## How It Works
+
+ElixirDashboard uses Phoenix's built-in `:telemetry` events:
+
+```mermaid
+graph LR
+    A[HTTP Request] --> B[Phoenix Endpoint]
+    B --> C[Telemetry Event]
+    C --> D[TelemetryHandler]
+    D --> E[Store GenServer]
+    E --> F[LiveView Dashboard]
+
+    B --> G[Ecto Query]
+    G --> H[Telemetry Event]
+    H --> D
+```
+
+1. **Phoenix emits** `[:phoenix, :endpoint, :stop]` events for HTTP requests
+2. **Ecto emits** `[app, :repo, :query]` events for database queries
+3. **TelemetryHandler** captures events above configured thresholds
+4. **Store GenServer** maintains top N slowest items in memory
+5. **LiveView** displays data with auto-refresh
+
+## Configuration
+
+All settings are optional with sensible defaults:
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `max_items` | `100` | Maximum items to keep in memory per category |
+| `endpoint_threshold_ms` | `100` | Only capture endpoints slower than this (ms) |
+| `query_threshold_ms` | `50` | Only capture queries slower than this (ms) |
+| `refresh_interval_ms` | `5000` | LiveView auto-refresh interval (ms) |
+| `repo_prefixes` | `[]` | List of Ecto repo telemetry prefixes |
+
+### Finding Your Repo Prefix
+
+Your Ecto repo module determines the telemetry prefix:
+
+```elixir
+# If your repo is:
+defmodule MyApp.Repo do
+  use Ecto.Repo, otp_app: :my_app
+end
+
+# Then your prefix is:
+repo_prefixes: [[:my_app, :repo]]
+
+# For multiple repos:
+repo_prefixes: [[:my_app, :repo], [:my_app, :read_repo]]
+```
+
+## API Reference
+
+### Programmatic Access
+
+```elixir
+# Get slow endpoints
+endpoints = ElixirDashboard.PerformanceMonitor.get_slow_endpoints()
+
+# Get slow queries
+queries = ElixirDashboard.PerformanceMonitor.get_slow_queries()
+
+# Clear all data
+ElixirDashboard.PerformanceMonitor.clear_all()
+
+# Runtime control
+ElixirDashboard.PerformanceMonitor.attach()   # Start monitoring
+ElixirDashboard.PerformanceMonitor.detach()   # Stop monitoring
 ```
 
 ## Documentation
 
-- [Integration Guide](INTEGRATION_GUIDE.md) - How to add to your Phoenix app
-- [Setup Guide](SETUP.md) - Detailed setup and configuration
-- [API Documentation](https://hexdocs.pm/elixir_dashboard) - Module documentation
+- **[Integration Guide](INTEGRATION_GUIDE.md)** - Step-by-step integration instructions
+- **[Library Usage](LIBRARY_USAGE.md)** - Understanding the dual-purpose architecture
+- **[Setup Guide](SETUP.md)** - Detailed configuration and troubleshooting
+- **[Changelog](CHANGELOG.md)** - Version history
 
 ## Requirements
 
@@ -142,14 +221,79 @@ mix docs
 - Phoenix ~> 1.7
 - Phoenix LiveView ~> 0.20
 
-## License
+## Architecture
 
-MIT License - see [LICENSE](LICENSE) for details.
+ElixirDashboard is designed as a **dual-purpose library**:
+
+### Library Mode (For Production Apps)
+- Minimal core dependencies (Phoenix, LiveView, Telemetry)
+- Clean module namespace (`ElixirDashboard.*`)
+- No demo app overhead
+- Publishable to Hex
+
+### Standalone Mode (For Development/Demos)
+- Full Phoenix application
+- Demo routes and UI
+- Uses library code internally
+- Perfect for testing features
+
+See [LIBRARY_USAGE.md](LIBRARY_USAGE.md) for architectural details.
+
+## Why ElixirDashboard?
+
+**Problem:** You're developing a Phoenix app and notice slow responses, but you don't want to:
+- Set up New Relic/external monitoring for local dev
+- Add heavyweight profiling tools
+- Manually add logging to find slow spots
+- Run separate monitoring infrastructure
+
+**Solution:** ElixirDashboard gives you instant visibility into your app's performance with zero setup.
+
+### Comparison
+
+| Feature | ElixirDashboard | Phoenix LiveDashboard | New Relic | Manual Logging |
+|---------|----------------|----------------------|-----------|----------------|
+| Setup Time | 3 minutes | Included | Hours | Ongoing |
+| Slow Endpoints | ✅ | ❌ | ✅ | Manual |
+| Slow Queries | ✅ | ❌ | ✅ | Manual |
+| Request Correlation | ✅ | ❌ | ✅ | Manual |
+| Development-Only | ✅ | ❌ | ❌ | N/A |
+| External Service | ❌ | ❌ | ✅ | ❌ |
+| Zero Config | ✅ | ✅ | ❌ | N/A |
+
+## Integration with New Relic
+
+ElixirDashboard complements (not replaces) production monitoring:
+
+- ✅ Uses the same telemetry events
+- ✅ Does not interfere with New Relic data collection
+- ✅ Provides immediate local feedback during development
+- ✅ Works independently - no New Relic configuration required
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Support
+
+- 📖 [Documentation](https://hexdocs.pm/elixir_dashboard)
+- 🐛 [Issues](https://github.com/nshkrdotcom/elixir_dashboard/issues)
+- 💬 [Discussions](https://github.com/nshkrdotcom/elixir_dashboard/discussions)
+
 ## Credits
 
-Designed as a companion tool for the [New Relic Elixir Agent](https://github.com/newrelic/elixir_agent).
+Designed as a companion tool for the [New Relic Elixir Agent](https://github.com/newrelic/elixir_agent) to provide local development insights.
+
+---
+
+Made with ❤️ by [nshkrdotcom](https://github.com/nshkrdotcom)
