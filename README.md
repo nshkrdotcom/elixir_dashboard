@@ -113,6 +113,138 @@ mix deps.get
 
 Visit `http://localhost:4000`
 
+---
+
+## 🧪 Testing the Dashboard (Demo Mode)
+
+The standalone app includes a complete demo system with **real slow queries** and **persistent DETS storage**.
+
+### Quick Test - Generate Data Instantly
+
+With the server running (`./start.sh`), open a new terminal and run:
+
+```bash
+# Generate 20 random slow requests (HTTP calls to demo endpoints)
+mix dashboard.test 20
+
+# Output:
+# 🚀 Generating 20 test requests to http://localhost:4000...
+# ....................
+# ✓ Generated 20 test requests
+#
+# Refresh browser to see results:
+#   http://localhost:4000/dev/performance/endpoints
+#   http://localhost:4000/dev/performance/queries
+```
+
+**Then refresh your browser** - you'll immediately see slow endpoints and queries!
+
+### CLI Commands
+
+#### `mix dashboard.test [count]`
+Generates test traffic by making HTTP requests to demo endpoints.
+
+**Server must be running!**
+
+```bash
+mix dashboard.test 50   # Generate 50 random slow requests
+```
+
+Randomly hits these endpoints:
+- `/demo/slow_cpu?ms=150` - CPU delay (Process.sleep)
+- `/demo/slow_query?seconds=0.1` - Database delay (pg_sleep)
+- `/demo/complex_query` - Complex JOIN with aggregation
+- `/demo/multiple_queries` - Multiple correlated queries
+- `/demo/random_slow` - Random delays
+
+#### `mix dashboard.stats`
+View current statistics from DETS storage.
+
+```bash
+mix dashboard.stats
+
+# Output:
+# === ElixirDashboard Statistics ===
+#
+# Storage Type:    DETS
+# Storage Path:    priv/dets
+# Max Items:       100
+#
+# Endpoints:       47 recorded
+# Queries:         89 recorded
+#
+# Top 5 Slowest Endpoints:
+#   521ms - GET /demo/random_slow
+#   203ms - GET /demo/slow_cpu?ms=150
+#   ...
+```
+
+#### `mix dashboard.slow_query [seconds]`
+Execute a single slow query directly (without HTTP).
+
+```bash
+mix dashboard.slow_query 0.2
+
+# Output:
+# 🐘 Executing slow query (pg_sleep 0.2s)...
+# ✓ Query completed
+#   Found 1000 users in database
+```
+
+#### `mix dashboard.clear`
+Clear all recorded data from DETS.
+
+```bash
+mix dashboard.clear
+
+# Output:
+# ✓ Dashboard data cleared
+```
+
+### Demo Endpoints (Click to Test)
+
+With the server running, visit these URLs in your browser:
+
+| URL | Description | Expected Duration |
+|-----|-------------|-------------------|
+| http://localhost:4000/demo/slow_cpu?ms=200 | CPU-bound delay | ~200ms |
+| http://localhost:4000/demo/slow_query?seconds=0.15 | Database pg_sleep | ~150ms |
+| http://localhost:4000/demo/complex_query | Complex JOIN + aggregation | ~80-100ms |
+| http://localhost:4000/demo/multiple_queries | Multiple correlated queries | ~200ms |
+| http://localhost:4000/demo/random_slow | Random delays | 100-500ms |
+
+### Persistent Storage (DETS)
+
+Unlike in-memory storage, DETS persists data across server restarts:
+
+```bash
+# Generate some data
+mix dashboard.test 10
+
+# Restart the server
+# Your data is still there! Check the dashboards.
+```
+
+**Storage location:** `priv/dets/`
+- `endpoints.dets` - Slow endpoint data
+- `queries.dets` - Slow query data
+
+### Why You See Nothing Initially
+
+The dashboards start **empty by design** because:
+
+1. **No slow requests yet** - You need to trigger endpoints that exceed the thresholds
+2. **Thresholds matter** - Only endpoints >100ms and queries >50ms are captured
+3. **Real monitoring** - This mirrors production behavior (you only see actual slow requests)
+
+**To populate the dashboard:**
+1. Run `mix dashboard.test 20` (easiest!)
+2. OR click the demo endpoint links on the homepage
+3. OR manually visit the `/demo/*` URLs
+4. Refresh the dashboard pages to see results
+
+---
+
 ## What You Get
 
 ### Slow Endpoints Dashboard (`/dev/performance/endpoints`)

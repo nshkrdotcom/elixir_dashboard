@@ -86,17 +86,59 @@ defmodule Mix.Tasks.Dashboard.Clear do
   end
 end
 
-defmodule Mix.Tasks.Dashboard.Test do
+defmodule Mix.Tasks.Dashboard.SlowQuery do
   @moduledoc """
-  Generate test data by hitting slow endpoints.
+  Execute a slow database query using pg_sleep.
 
   ## Usage
 
-      mix dashboard.test [count]
+      mix dashboard.slow_query [seconds]
 
-  Defaults to 10 requests if count not specified.
+  Defaults to 0.15 seconds if not specified.
   """
-  @shortdoc "Generate test slow endpoints/queries"
+  @shortdoc "Execute a slow database query"
+
+  use Mix.Task
+  alias ElixirDashboardWeb.Repo
+
+  @impl Mix.Task
+  def run(args) do
+    Mix.Task.run("app.start")
+
+    seconds =
+      case args do
+        [s] -> String.to_float(s)
+        _ -> 0.15
+      end
+
+    IO.puts(
+      IO.ANSI.cyan() <> "\n🐘 Executing slow query (pg_sleep #{seconds}s)..." <> IO.ANSI.reset()
+    )
+
+    # Execute slow query
+    Repo.query!("SELECT pg_sleep($1)", [seconds])
+
+    # Also run a real query
+    result = Repo.query!("SELECT COUNT(*) FROM demo_users")
+    [[count]] = result.rows
+
+    IO.puts(IO.ANSI.green() <> "✓ Query completed" <> IO.ANSI.reset())
+    IO.puts("  Found #{count} users in database")
+    IO.puts("\nCheck /dev/performance/queries to see it tracked")
+  end
+end
+
+defmodule Mix.Tasks.Dashboard.SlowEndpoint do
+  @moduledoc """
+  Simulate a slow endpoint using Process.sleep.
+
+  ## Usage
+
+      mix dashboard.slow_endpoint [milliseconds]
+
+  Defaults to 200ms if not specified.
+  """
+  @shortdoc "Simulate a slow endpoint"
 
   use Mix.Task
 
@@ -104,13 +146,56 @@ defmodule Mix.Tasks.Dashboard.Test do
   def run(args) do
     Mix.Task.run("app.start")
 
+    ms =
+      case args do
+        [m] -> String.to_integer(m)
+        _ -> 200
+      end
+
+    IO.puts(IO.ANSI.cyan() <> "\n⏱️  Simulating slow endpoint (#{ms}ms)..." <> IO.ANSI.reset())
+
+    # Simulate endpoint work
+    Process.sleep(ms)
+
+    IO.puts(IO.ANSI.green() <> "✓ Completed after #{ms}ms" <> IO.ANSI.reset())
+    IO.puts("\nNote: This simulates the work but doesn't create an HTTP request.")
+    IO.puts("To track in dashboard, use: mix dashboard.test")
+  end
+end
+
+defmodule Mix.Tasks.Dashboard.Test do
+  @moduledoc """
+  Generate test data by calling demo endpoints via HTTP.
+
+  ## Usage
+
+      mix dashboard.test [count]
+
+  Defaults to 10 requests if count not specified.
+
+  Note: Server must be running! Start with `./start.sh` first.
+  """
+  @shortdoc "Generate test slow endpoints/queries (requires running server)"
+
+  use Mix.Task
+
+  @impl Mix.Task
+  def run(args) do
+    # Don't start the app - we'll call the running server via HTTP
+    :inets.start()
+
     count =
       case args do
         [n] -> String.to_integer(n)
         _ -> 10
       end
 
-    IO.puts(IO.ANSI.cyan() <> "\n Generating #{count} test requests..." <> IO.ANSI.reset())
+    IO.puts(
+      IO.ANSI.cyan() <>
+        "\n🚀 Generating #{count} test requests to http://localhost:4000..." <> IO.ANSI.reset()
+    )
+
+    IO.puts("   (Make sure server is running with ./start.sh)\n")
 
     endpoints = [
       "/demo/slow_cpu?ms=150",
@@ -120,24 +205,32 @@ defmodule Mix.Tasks.Dashboard.Test do
       "/demo/random_slow"
     ]
 
-    for i <- 1..count do
+    for _i <- 1..count do
       endpoint = Enum.random(endpoints)
       url = "http://localhost:4000#{endpoint}"
 
-      case :httpc.request(:get, {String.to_charlist(url), []}, [], []) do
+      case :httpc.request(:get, {String.to_charlist(url), []}, [{:timeout, 5000}], []) do
         {:ok, {{_, 200, _}, _, _}} ->
           IO.write(IO.ANSI.green() <> "." <> IO.ANSI.reset())
 
-        {:error, reason} ->
+        {:error, :econnrefused} ->
           IO.puts(
-            IO.ANSI.red() <> "\n✗ Error on request #{i}: #{inspect(reason)}" <> IO.ANSI.reset()
+            IO.ANSI.red() <>
+              "\n✗ Server not running! Start with ./start.sh first" <> IO.ANSI.reset()
           )
+
+          System.halt(1)
+
+        {:error, reason} ->
+          IO.puts(IO.ANSI.yellow() <> "\n⚠ #{inspect(reason)}" <> IO.ANSI.reset())
       end
 
       Process.sleep(100)
     end
 
     IO.puts(IO.ANSI.green() <> "\n✓ Generated #{count} test requests" <> IO.ANSI.reset())
-    IO.puts("\nRun `mix dashboard.stats` to see results")
+    IO.puts("\nRefresh browser to see results:")
+    IO.puts("  http://localhost:4000/dev/performance/endpoints")
+    IO.puts("  http://localhost:4000/dev/performance/queries")
   end
 end

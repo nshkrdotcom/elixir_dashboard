@@ -3,7 +3,6 @@ defmodule ElixirDashboardWeb.DemoController do
   Demo controller with intentionally slow endpoints for testing the dashboard.
   """
   use ElixirDashboardWeb, :controller
-  import Ecto.Query
   alias ElixirDashboardWeb.Repo
 
   @doc """
@@ -29,11 +28,11 @@ defmodule ElixirDashboardWeb.DemoController do
     Repo.query!("SELECT pg_sleep($1)", [sleep_seconds])
 
     # Also fetch some data
-    users = Repo.all(from(u in "demo_users", limit: 10))
+    result = Repo.query!("SELECT * FROM demo_users LIMIT 10")
 
     json(conn, %{
       message: "Query slept for #{sleep_seconds}s",
-      users_count: length(users),
+      users_count: length(result.rows),
       timestamp: DateTime.utc_now()
     })
   end
@@ -72,17 +71,17 @@ defmodule ElixirDashboardWeb.DemoController do
   def multiple_queries(conn, _params) do
     # Several queries that will all be tracked
     Repo.query!("SELECT pg_sleep(0.06)", [])
-    users = Repo.all(from(u in "demo_users", limit: 5))
+    users = Repo.query!("SELECT * FROM demo_users LIMIT 5")
 
     Repo.query!("SELECT pg_sleep(0.07)", [])
-    posts = Repo.all(from(p in "demo_posts", limit: 10))
+    posts = Repo.query!("SELECT * FROM demo_posts LIMIT 10")
 
     Repo.query!("SELECT pg_sleep(0.08)", [])
 
     json(conn, %{
       message: "Multiple queries completed",
-      users_count: length(users),
-      posts_count: length(posts),
+      users_count: length(users.rows),
+      posts_count: length(posts.rows),
       timestamp: DateTime.utc_now()
     })
   end
