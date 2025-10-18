@@ -1,0 +1,316 @@
+/*
+ * Picasso x Wright custom theme for Phoenix LiveDashboard
+ */
+
+/* Import base Picasso-Wright styles */
+@import url('/assets/css/picasso_wright.css');
+
+/* Override LiveDashboard color scheme */
+:root {
+  --ld-primary: #1E3A5F;
+  --ld-primary-light: #4A7BA7;
+  --ld-secondary: #C85A6E;
+  --ld-success: #06FFA5;
+  --ld-warning: #F4E285;
+  --ld-danger: #E63946;
+  --ld-info: #4A7BA7;
+  --ld-dark: #0A1128;
+  --ld-light: #E8AEB7;
+}
+
+/* Main LiveDashboard container */
+body[data-phx-main] {
+  background: linear-gradient(to bottom, var(--picasso-deep-blue) 0%, var(--picasso-midnight) 100%) !important;
+}
+
+/* Header bar */
+header.phx-dashboard-header {
+  background: var(--gradient-cubist) !important;
+  border-bottom: 4px solid var(--picasso-umber) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+header.phx-dashboard-header h1,
+header.phx-dashboard-header h2 {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Navigation tabs */
+nav.phx-dashboard-nav {
+  background: var(--picasso-midnight) !important;
+  border-bottom: 3px solid var(--picasso-gold) !important;
+}
+
+nav.phx-dashboard-nav a {
+  color: var(--picasso-rose) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  transition: all 0.3s ease !important;
+}
+
+nav.phx-dashboard-nav a:hover {
+  background: var(--picasso-azure) !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+}
+
+nav.phx-dashboard-nav a.active {
+  background: var(--gradient-rose) !important;
+  color: white !important;
+  border-bottom: 4px solid var(--picasso-gold) !important;
+}
+
+/* Main content area */
+main.phx-dashboard-content {
+  background: transparent !important;
+  padding: 2rem !important;
+}
+
+/* Cards and panels */
+.phx-dashboard-card,
+.card {
+  background: white !important;
+  border: 3px solid var(--picasso-umber) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 0 !important;
+  position: relative !important;
+}
+
+.phx-dashboard-card::before,
+.card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: var(--gradient-cubist) !important;
+}
+
+.phx-dashboard-card-title,
+.card-title {
+  color: var(--picasso-midnight) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 2px solid var(--picasso-sand) !important;
+  padding-bottom: 0.75rem !important;
+}
+
+/* Tables */
+table {
+  border: 3px solid var(--picasso-umber) !important;
+  border-collapse: collapse !important;
+}
+
+table thead {
+  background: var(--gradient-cubist) !important;
+}
+
+table thead th {
+  color: white !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  padding: 1rem 1.5rem !important;
+  border-bottom: 3px solid var(--picasso-umber) !important;
+}
+
+table tbody tr {
+  border-bottom: 2px solid var(--picasso-sand) !important;
+  transition: all 0.2s ease !important;
+}
+
+table tbody tr:hover {
+  background: linear-gradient(90deg,
+    rgba(244, 226, 133, 0.15) 0%,
+    rgba(212, 163, 115, 0.1) 100%) !important;
+}
+
+table tbody td {
+  padding: 0.75rem 1.5rem !important;
+  color: var(--picasso-midnight) !important;
+}
+
+/* Buttons */
+button,
+.btn,
+a.btn {
+  background: var(--gradient-blue) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+button:hover,
+.btn:hover,
+a.btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Metrics and stats */
+.phx-dashboard-metric {
+  background: white !important;
+  border: 3px solid var(--picasso-umber) !important;
+  border-left: 6px solid var(--picasso-azure) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  padding: 1.5rem !important;
+}
+
+.phx-dashboard-metric-value {
+  color: var(--picasso-azure) !important;
+  font-weight: 900 !important;
+  font-size: 2.5rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.phx-dashboard-metric-label {
+  color: var(--picasso-umber) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Code blocks */
+pre,
+code {
+  background: var(--picasso-deep-blue) !important;
+  color: var(--picasso-mint) !important;
+  border: 2px solid var(--picasso-midnight) !important;
+  padding: 1rem !important;
+  font-family: 'Courier New', monospace !important;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Progress bars */
+.progress {
+  background: var(--picasso-sand) !important;
+  border: 2px solid var(--picasso-umber) !important;
+  height: 24px !important;
+}
+
+.progress-bar {
+  background: var(--gradient-rose) !important;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Badges */
+.badge {
+  background: var(--picasso-gold) !important;
+  color: var(--picasso-deep-blue) !important;
+  font-weight: 900 !important;
+  padding: 0.4rem 0.8rem !important;
+  border-radius: 2px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.badge-primary {
+  background: var(--gradient-blue) !important;
+  color: white !important;
+}
+
+.badge-success {
+  background: linear-gradient(135deg, #06FFA5 0%, #00CC7E 100%) !important;
+  color: var(--picasso-deep-blue) !important;
+}
+
+.badge-warning {
+  background: linear-gradient(135deg, #F4E285 0%, #E6C84E 100%) !important;
+  color: var(--picasso-deep-blue) !important;
+}
+
+.badge-danger {
+  background: linear-gradient(135deg, #E63946 0%, #C41E3A 100%) !important;
+  color: white !important;
+}
+
+/* Alerts */
+.alert {
+  border-left: 6px solid var(--picasso-azure) !important;
+  border-right: 6px solid var(--picasso-sand) !important;
+  background: rgba(232, 174, 183, 0.1) !important;
+  padding: 1.25rem !important;
+  font-weight: 600 !important;
+}
+
+.alert::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 3px !important;
+  background: var(--gradient-cubist) !important;
+}
+
+/* Charts */
+.phx-dashboard-chart {
+  background: white !important;
+  border: 3px solid var(--picasso-umber) !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Sidebar */
+aside {
+  background: var(--picasso-midnight) !important;
+  border-right: 4px solid var(--picasso-gold) !important;
+}
+
+aside a {
+  color: var(--picasso-rose) !important;
+  font-weight: 700 !important;
+  padding: 0.75rem 1rem !important;
+  transition: all 0.2s ease !important;
+}
+
+aside a:hover {
+  background: var(--picasso-azure) !important;
+  color: white !important;
+  transform: translateX(4px) !important;
+}
+
+/* Forms */
+input,
+select,
+textarea {
+  background: white !important;
+  border: 2px solid var(--picasso-sand) !important;
+  padding: 0.75rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--picasso-azure) !important;
+  outline: 2px solid var(--picasso-gold) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 4px 12px rgba(74, 123, 167, 0.3) !important;
+}
+
+/* Horizontal bands for visual separation */
+.phx-dashboard-row::before {
+  content: '' !important;
+  display: block !important;
+  height: 2px !important;
+  background: var(--picasso-gold) !important;
+  margin: 1.5rem 0 !important;
+  opacity: 0.4 !important;
+}

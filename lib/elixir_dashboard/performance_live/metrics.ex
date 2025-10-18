@@ -48,158 +48,169 @@ defmodule ElixirDashboard.PerformanceLive.Metrics do
 
     ~H"""
     <ElixirDashboardWeb.Components.PerformanceNav.performance_nav current_page={:metrics} />
-    <div class="container mx-auto p-6">
-      <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">
-          <%= @app_name %> - Performance Metrics
-        </h1>
-        <p class="text-sm text-gray-600 mb-4">
-          Aggregated performance data for database, external services, and custom metrics.
-          <span class="inline-flex items-center px-2 py-1 ml-2 text-xs font-medium text-green-800 bg-green-100 rounded">
-            Powered by ElixirTracer
-          </span>
-        </p>
-        <div class="flex gap-2">
-          <button
-            phx-click="clear"
-            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-          >
-            Clear Data
-          </button>
+    <div class="wright-container">
+      <div class="horizontal-band"></div>
+
+      <div class="picasso-card">
+        <div class="cubist-pattern"></div>
+
+        <div class="mb-6">
+          <h1 class="picasso-title" style="margin-bottom: 0.5rem;">
+            <%= @app_name %> - Performance Metrics
+          </h1>
+          <p class="text-sm text-gray-600 mb-4">
+            Aggregated performance data for database, external services, and custom metrics.
+            <span class="inline-flex items-center px-2 py-1 ml-2 text-xs font-medium text-green-800 bg-green-100 rounded">
+              Powered by ElixirTracer
+            </span>
+          </p>
+          <div class="flex gap-2">
+            <button
+              phx-click="clear"
+              class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+            >
+              Clear Data
+            </button>
+          </div>
+        </div>
+        <!-- Filter Tabs -->
+        <div class="mb-6 border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8">
+            <button
+              phx-click="filter"
+              phx-value-type="all"
+              class={["py-4 px-1 border-b-2 font-medium text-sm", filter_tab_class(@filter == :all)]}
+            >
+              All Metrics (<%= total_count(@grouped) %>)
+            </button>
+            <button
+              phx-click="filter"
+              phx-value-type="datastore"
+              class={[
+                "py-4 px-1 border-b-2 font-medium text-sm",
+                filter_tab_class(@filter == :datastore)
+              ]}
+            >
+              Database (<%= length(Map.get(@grouped, :datastore, [])) %>)
+            </button>
+            <button
+              phx-click="filter"
+              phx-value-type="external"
+              class={[
+                "py-4 px-1 border-b-2 font-medium text-sm",
+                filter_tab_class(@filter == :external)
+              ]}
+            >
+              External (<%= length(Map.get(@grouped, :external, [])) %>)
+            </button>
+            <button
+              phx-click="filter"
+              phx-value-type="custom"
+              class={[
+                "py-4 px-1 border-b-2 font-medium text-sm",
+                filter_tab_class(@filter == :custom)
+              ]}
+            >
+              Custom (<%= length(Map.get(@grouped, :custom, [])) %>)
+            </button>
+          </nav>
+        </div>
+
+        <div
+          :if={filtered_metrics_empty?(@filtered_metrics)}
+          class="bg-blue-50 border border-blue-200 rounded-lg p-4"
+        >
+          <p class="text-blue-800">
+            No metrics recorded yet for this category.
+          </p>
+        </div>
+        <!-- Metrics Table -->
+        <div
+          :if={!filtered_metrics_empty?(@filtered_metrics)}
+          class="bg-white shadow-md rounded-lg overflow-hidden"
+        >
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Metric Name
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Calls
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Total Time
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Avg
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Min
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Max
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <%= for {_category, metrics_in_category} <- @filtered_metrics, metric <- metrics_in_category do %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4">
+                    <div class="text-sm font-medium text-gray-900 font-mono">
+                      <%= metric.name %>
+                    </div>
+                    <%= if metric_category(metric.name) do %>
+                      <div class="text-xs text-gray-500 mt-1">
+                        <span class={[
+                          "inline-flex items-center px-2 py-0.5 rounded",
+                          category_badge_class(metric_category(metric.name))
+                        ]}>
+                          <%= metric_category(metric.name) %>
+                        </span>
+                      </div>
+                    <% end %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <%= metric.call_count %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <%= format_duration(metric.total_call_time) %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <%= format_duration(metric.total_call_time / metric.call_count) %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                    <%= format_duration(metric.min_call_time) %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">
+                    <%= format_duration(metric.max_call_time) %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- Filter Tabs -->
-      <div class="mb-6 border-b border-gray-200">
-        <nav class="-mb-px flex space-x-8">
-          <button
-            phx-click="filter"
-            phx-value-type="all"
-            class={["py-4 px-1 border-b-2 font-medium text-sm", filter_tab_class(@filter == :all)]}
-          >
-            All Metrics (<%= total_count(@grouped) %>)
-          </button>
-          <button
-            phx-click="filter"
-            phx-value-type="datastore"
-            class={[
-              "py-4 px-1 border-b-2 font-medium text-sm",
-              filter_tab_class(@filter == :datastore)
-            ]}
-          >
-            Database (<%= length(Map.get(@grouped, :datastore, [])) %>)
-          </button>
-          <button
-            phx-click="filter"
-            phx-value-type="external"
-            class={[
-              "py-4 px-1 border-b-2 font-medium text-sm",
-              filter_tab_class(@filter == :external)
-            ]}
-          >
-            External (<%= length(Map.get(@grouped, :external, [])) %>)
-          </button>
-          <button
-            phx-click="filter"
-            phx-value-type="custom"
-            class={["py-4 px-1 border-b-2 font-medium text-sm", filter_tab_class(@filter == :custom)]}
-          >
-            Custom (<%= length(Map.get(@grouped, :custom, [])) %>)
-          </button>
-        </nav>
-      </div>
 
-      <div
-        :if={filtered_metrics_empty?(@filtered_metrics)}
-        class="bg-blue-50 border border-blue-200 rounded-lg p-4"
-      >
-        <p class="text-blue-800">
-          No metrics recorded yet for this category.
-        </p>
-      </div>
-      <!-- Metrics Table -->
-      <div
-        :if={!filtered_metrics_empty?(@filtered_metrics)}
-        class="bg-white shadow-md rounded-lg overflow-hidden"
-      >
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Metric Name
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Calls
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Total Time
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Avg
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Min
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Max
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <%= for {_category, metrics_in_category} <- @filtered_metrics, metric <- metrics_in_category do %>
-              <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4">
-                  <div class="text-sm font-medium text-gray-900 font-mono">
-                    <%= metric.name %>
-                  </div>
-                  <%= if metric_category(metric.name) do %>
-                    <div class="text-xs text-gray-500 mt-1">
-                      <span class={[
-                        "inline-flex items-center px-2 py-0.5 rounded",
-                        category_badge_class(metric_category(metric.name))
-                      ]}>
-                        <%= metric_category(metric.name) %>
-                      </span>
-                    </div>
-                  <% end %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <%= metric.call_count %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  <%= format_duration(metric.total_call_time) %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <%= format_duration(metric.total_call_time / metric.call_count) %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">
-                  <%= format_duration(metric.min_call_time) %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                  <%= format_duration(metric.max_call_time) %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+      <div class="horizontal-band" style="margin-top: 2rem;"></div>
     </div>
     """
   end

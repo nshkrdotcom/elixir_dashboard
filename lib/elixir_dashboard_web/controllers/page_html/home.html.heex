@@ -4,144 +4,122 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Elixir Dashboard - Performance Monitoring</title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <link rel="stylesheet" href="/assets/css/picasso_wright.css" />
   </head>
-  <body class="bg-gray-50">
-    <div class="min-h-screen flex items-center justify-center px-4">
-      <div class="max-w-2xl w-full">
-        <!-- Dev Mode Banner -->
-        <div class="mb-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg p-4 text-white shadow-lg">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fill-rule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <div>
-                <div class="font-bold">Demo Mode Active</div>
-                <div class="text-sm text-purple-100">
-                  Using real database with slow query endpoints for testing
-                </div>
-              </div>
-            </div>
-            <div class="bg-white bg-opacity-20 rounded px-3 py-1 text-sm font-mono">DEV</div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-xl p-8">
-          <h1 class="text-4xl font-bold text-gray-900 mb-4">
-            Elixir Dashboard
-          </h1>
-          <p class="text-lg text-gray-600 mb-8">
-            Performance monitoring for your Phoenix application
-          </p>
-
-          <div class="space-y-3">
-            <h2 class="text-lg font-semibold text-gray-900 mb-3">📊 Performance Dashboards</h2>
-
-            <a
-              href="/dev/performance/endpoints"
-              class="block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
-            >
-              📊 Slow Endpoints
-            </a>
-
-            <a
-              href="/dev/performance/queries"
-              class="block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
-            >
-              🔍 Slow Queries
-            </a>
-
-            <a
-              href="/dev/performance/errors"
-              class="block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
-            >
-              ❌ Error Traces
-              <span class="ml-2 text-xs bg-red-500 px-2 py-1 rounded">NEW</span>
-            </a>
-
-            <a
-              href="/dev/performance/metrics"
-              class="block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
-            >
-              📈 Performance Metrics
-              <span class="ml-2 text-xs bg-indigo-500 px-2 py-1 rounded">NEW</span>
-            </a>
-
-            <a
-              href="/dev/performance/events"
-              class="block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
-            >
-              🎉 Custom Events
-              <span class="ml-2 text-xs bg-purple-500 px-2 py-1 rounded">NEW</span>
-            </a>
-
-            <div class="pt-3 border-t border-gray-200">
-              <a
-                href="/dev/dashboard"
-                class="block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
-              >
-                Phoenix LiveDashboard
-              </a>
+  <body>
+    <div class="wright-container">
+      <!-- Picasso-inspired Demo Banner -->
+      <div class="picasso-banner">
+        <div class="picasso-banner-content">
+          <div style="display: flex; align-items: center;">
+            <svg class="picasso-banner-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <div>
+              <div class="picasso-banner-title">Demo Mode Active</div>
+              <p class="picasso-banner-text">
+                Using real database with slow query endpoints for testing
+              </p>
             </div>
           </div>
-
-          <div class="mt-8 pt-6 border-t border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900 mb-2">Features</h2>
-            <ul class="list-disc list-inside text-gray-600 space-y-1">
-              <li>Real-time monitoring of slow API endpoints (>100ms)</li>
-              <li>Track slow SQL queries (>50ms)</li>
-              <li>Error traces with full stack traces & context</li>
-              <li>Aggregated performance metrics (DB, external, custom)</li>
-              <li>Custom business events tracking</li>
-              <li>Powered by ElixirTracer - local-first observability</li>
-              <li>Auto-refresh every 5 seconds</li>
-              <li>DETS-based persistent storage (survives restarts)</li>
-            </ul>
-          </div>
-
-          <div class="mt-6 pt-6 border-t border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900 mb-3">Test Endpoints</h2>
-            <div class="grid grid-cols-2 gap-2 text-sm">
-              <a
-                href="/demo/slow_cpu?ms=200"
-                class="text-blue-600 hover:text-blue-800 font-mono"
-              >
-                /demo/slow_cpu
-              </a>
-              <a
-                href="/demo/slow_query?seconds=0.15"
-                class="text-blue-600 hover:text-blue-800 font-mono"
-              >
-                /demo/slow_query
-              </a>
-              <a
-                href="/demo/complex_query"
-                class="text-blue-600 hover:text-blue-800 font-mono"
-              >
-                /demo/complex_query
-              </a>
-              <a
-                href="/demo/multiple_queries"
-                class="text-blue-600 hover:text-blue-800 font-mono"
-              >
-                /demo/multiple_queries
-              </a>
-            </div>
-            <div class="mt-3 p-3 bg-gray-50 rounded text-xs font-mono text-gray-700">
-              <div>$ mix dashboard.test 20      # Generate test endpoints/queries</div>
-              <div>$ mix dashboard.fixtures    # Generate errors/metrics/events</div>
-              <div>$ mix dashboard.stats       # View statistics</div>
-              <div>$ mix dashboard.clear       # Clear all data</div>
-            </div>
-          </div>
+          <div class="picasso-badge">DEV</div>
         </div>
       </div>
+
+      <!-- Wright horizontal band -->
+      <div class="horizontal-band"></div>
+
+      <!-- Main Picasso-Wright Card -->
+      <div class="picasso-card">
+        <div class="cubist-pattern"></div>
+
+        <h1 class="picasso-title">
+          Elixir Dashboard
+        </h1>
+        <p class="picasso-subtitle">
+          Performance monitoring for your Phoenix application
+        </p>
+
+        <div class="horizontal-band-thin"></div>
+
+        <!-- Performance Dashboards - Wright button group -->
+        <h2 class="picasso-section-header">Performance Dashboards</h2>
+
+        <div class="wright-button-group">
+          <a href="/dev/performance/endpoints" class="picasso-btn picasso-btn-blue">
+            <span>📊</span>
+            <span>Slow Endpoints</span>
+          </a>
+
+          <a href="/dev/performance/queries" class="picasso-btn picasso-btn-sage">
+            <span>🔍</span>
+            <span>Slow Queries</span>
+          </a>
+
+          <a href="/dev/performance/errors" class="picasso-btn picasso-btn-red">
+            <span>❌</span>
+            <span>Error Traces</span>
+            <span class="picasso-new-badge">NEW</span>
+          </a>
+
+          <a href="/dev/performance/metrics" class="picasso-btn picasso-btn-rose">
+            <span>📈</span>
+            <span>Performance Metrics</span>
+            <span class="picasso-new-badge">NEW</span>
+          </a>
+
+          <a href="/dev/performance/events" class="picasso-btn picasso-btn-cubist">
+            <span>🎉</span>
+            <span>Custom Events</span>
+            <span class="picasso-new-badge">NEW</span>
+          </a>
+
+          <a href="/dev/dashboard" class="picasso-btn picasso-btn-copper">
+            <span>⚡</span>
+            <span>Phoenix LiveDashboard</span>
+          </a>
+        </div>
+
+        <!-- Features Panel - Wright-inspired -->
+        <div class="wright-panel" style="background: linear-gradient(135deg, var(--picasso-crimson) 0%, var(--picasso-burgundy) 100%);">
+          <h2 style="color: var(--picasso-gold);">Features</h2>
+          <ul>
+            <li>Real-time monitoring of slow API endpoints (>100ms)</li>
+            <li>Track slow SQL queries (>50ms)</li>
+            <li>Error traces with full stack traces & context</li>
+            <li>Aggregated performance metrics (DB, external, custom)</li>
+            <li>Custom business events tracking</li>
+            <li>Powered by ElixirTracer - local-first observability</li>
+            <li>Auto-refresh every 5 seconds</li>
+            <li>DETS-based persistent storage (survives restarts)</li>
+          </ul>
+        </div>
+
+        <!-- Test Endpoints Section -->
+        <h2 class="picasso-section-header">Test Endpoints</h2>
+        <div class="wright-grid">
+          <a href="/demo/slow_cpu?ms=200">/demo/slow_cpu</a>
+          <a href="/demo/slow_query?seconds=0.15">/demo/slow_query</a>
+          <a href="/demo/complex_query">/demo/complex_query</a>
+          <a href="/demo/multiple_queries">/demo/multiple_queries</a>
+        </div>
+
+        <!-- Command Reference -->
+        <div class="horizontal-band-thin" style="margin: 2rem 0 1.5rem 0;"></div>
+        <div class="wright-code">
+          <div>$ mix dashboard.test 20      # Generate test endpoints/queries</div>
+          <div>$ mix dashboard.fixtures    # Generate errors/metrics/events</div>
+          <div>$ mix dashboard.stats       # View statistics</div>
+          <div>$ mix dashboard.clear       # Clear all data</div>
+        </div>
+      </div>
+
+      <!-- Bottom horizontal band -->
+      <div class="horizontal-band" style="margin-top: 2rem;"></div>
     </div>
   </body>
 </html>

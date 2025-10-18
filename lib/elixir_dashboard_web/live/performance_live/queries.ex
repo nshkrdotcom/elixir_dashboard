@@ -32,66 +32,74 @@ defmodule ElixirDashboardWeb.PerformanceLive.Queries do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="container mx-auto p-6">
-      <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Slow SQL Queries</h1>
-        <p class="text-sm text-gray-600 mb-4">
-          Showing the 100 slowest queries recorded since the server started (threshold: 50ms).
-        </p>
-        <button
-          phx-click="clear"
-          class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-        >
-          Clear Data
-        </button>
-      </div>
+    <div class="wright-container">
+      <div class="horizontal-band"></div>
 
-      <div :if={length(@queries) == 0} class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p class="text-blue-800">
-          No slow queries recorded yet. Start making database requests to see data.
-        </p>
-      </div>
+      <div class="picasso-card">
+        <div class="cubist-pattern"></div>
 
-      <div :if={length(@queries) > 0} class="space-y-4">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+          <div>
+            <h1 class="picasso-title" style="margin-bottom: 0.5rem;">Slow SQL Queries</h1>
+            <p class="picasso-subtitle" style="margin: 0;">
+              Showing the 100 slowest queries recorded (threshold: 50ms)
+            </p>
+          </div>
+          <button
+            phx-click="clear"
+            class="picasso-btn picasso-btn-red"
+            style="width: auto; padding: 1rem 2rem; border: none; margin: 0;"
+          >
+            <span>🗑️</span>
+            <span>Clear Data</span>
+          </button>
+        </div>
+
+        <div class="horizontal-band-thin"></div>
+
         <div
-          :for={query <- @queries}
-          class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition"
+          :if={length(@queries) == 0}
+          class="wright-panel"
+          style="background: linear-gradient(135deg, rgba(74, 123, 167, 0.1) 0%, rgba(30, 58, 95, 0.05) 100%); border-left-color: var(--picasso-azure); border-right-color: var(--picasso-midnight);"
         >
-          <div class="p-5">
-            <div class="flex justify-between items-baseline mb-3">
+          <p style="color: var(--picasso-azure); font-size: 1.1rem; margin: 0;">
+            🔍 No slow queries recorded yet. Start making database requests to see data.
+          </p>
+        </div>
+
+        <div :if={length(@queries) > 0} class="picasso-query-list">
+          <div :for={query <- @queries} class="picasso-query-card">
+            <div class="picasso-query-header">
               <span class={[
-                "text-xl font-bold",
-                duration_color(query.duration_ms)
+                "picasso-duration-badge",
+                duration_class(query.duration_ms)
               ]}>
                 <%= query.duration_ms %>ms
               </span>
-              <span class="text-sm text-gray-500">
+              <span class="picasso-timestamp">
                 <%= format_timestamp(query.timestamp) %>
               </span>
             </div>
 
-            <div class="mb-3">
-              <p class="text-sm text-gray-600">
-                <span class="font-semibold">Endpoint:</span>
-                <span class="font-mono ml-2 text-gray-800"><%= query.endpoint_path %></span>
-              </p>
+            <div class="picasso-query-endpoint">
+              <span style="color: var(--picasso-umber); font-weight: 700;">Endpoint:</span>
+              <span class="picasso-code-inline"><%= query.endpoint_path %></span>
             </div>
 
-            <div class="bg-gray-50 rounded-md p-3 border border-gray-200">
-              <p class="text-xs text-gray-500 mb-1 font-semibold">SQL Query:</p>
-              <pre class="text-sm overflow-x-auto whitespace-pre-wrap break-words font-mono text-gray-800"><code><%= query.query %></code></pre>
+            <div class="picasso-sql-block">
+              <div class="picasso-sql-label">SQL Query:</div>
+              <pre class="picasso-sql-code"><code><%= query.query %></code></pre>
             </div>
 
-            <div
-              :if={query.params && length(query.params) > 0}
-              class="mt-3 bg-blue-50 rounded-md p-3 border border-blue-200"
-            >
-              <p class="text-xs text-blue-700 mb-1 font-semibold">Parameters:</p>
-              <pre class="text-sm overflow-x-auto whitespace-pre-wrap break-words font-mono text-blue-900"><code><%= inspect(query.params, pretty: true) %></code></pre>
+            <div :if={query.params && length(query.params) > 0} class="picasso-params-block">
+              <div class="picasso-params-label">Parameters:</div>
+              <pre class="picasso-params-code"><code><%= inspect(query.params, pretty: true) %></code></pre>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="horizontal-band" style="margin-top: 2rem;"></div>
     </div>
     """
   end
@@ -102,8 +110,8 @@ defmodule ElixirDashboardWeb.PerformanceLive.Queries do
     |> Calendar.strftime("%Y-%m-%d %H:%M:%S")
   end
 
-  defp duration_color(ms) when ms > 500, do: "text-red-600"
-  defp duration_color(ms) when ms > 200, do: "text-orange-600"
-  defp duration_color(ms) when ms > 100, do: "text-yellow-600"
-  defp duration_color(_), do: "text-green-600"
+  defp duration_class(ms) when ms > 500, do: "duration-critical"
+  defp duration_class(ms) when ms > 200, do: "duration-high"
+  defp duration_class(ms) when ms > 100, do: "duration-medium"
+  defp duration_class(_), do: "duration-low"
 end

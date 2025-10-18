@@ -53,7 +53,15 @@ defmodule ElixirDashboardWeb.Router do
     scope "/dev" do
       pipe_through :browser
 
-      live_dashboard "/dashboard", metrics: ElixirDashboardWeb.Telemetry
+      live_dashboard "/dashboard",
+        metrics: ElixirDashboardWeb.Telemetry,
+        additional_pages: [],
+        csp_nonce_assign_key: %{
+          img: :img_csp_nonce,
+          style: :style_csp_nonce,
+          script: :script_csp_nonce
+        },
+        home_app: {"Elixir Dashboard", :elixir_dashboard}
     end
   end
 end

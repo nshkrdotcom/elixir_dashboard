@@ -1,5 +1,19 @@
-<main class="min-h-screen">
-  <.flash :if={@flash} kind={:info} flash={@flash} />
-  <.flash :if={@flash} kind={:error} flash={@flash} />
-  <%= @inner_content %>
-</main>
+<!DOCTYPE html>
+<html lang="en" class="[scrollbar-gutter:stable]">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title suffix=" · Elixir Dashboard">
+      <%= assigns[:page_title] || "Performance Monitor" %>
+    </.live_title>
+    <link rel="stylesheet" href="/assets/css/picasso_wright.css" />
+  </head>
+  <body>
+    <main class="min-h-screen">
+      <.flash :if={@flash} kind={:info} flash={@flash} />
+      <.flash :if={@flash} kind={:error} flash={@flash} />
+      <%= @inner_content %>
+    </main>
+  </body>
+</html>

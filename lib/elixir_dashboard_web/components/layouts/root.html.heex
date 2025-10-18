@@ -7,8 +7,7 @@
     <.live_title suffix={" · #{app_name()}"}>
       <%= assigns[:page_title] || "Performance Monitor" %>
     </.live_title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <link rel="stylesheet" href="/assets/css/picasso_wright.css" />
     <script
       defer
       phx-track-static
@@ -17,28 +16,31 @@
     >
     </script>
   </head>
-  <body class="bg-gray-50 antialiased">
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-      <div class="container mx-auto px-6 py-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-8">
-            <a href="/" class="text-xl font-bold text-gray-900">
+  <body>
+    <nav class="picasso-nav">
+      <div class="picasso-nav-container">
+        <div class="picasso-nav-content">
+          <div class="picasso-nav-left">
+            <a href="/" class="picasso-nav-brand">
               <%= app_name() %>
             </a>
-            <div class="hidden md:flex space-x-4">
-              <a
-                href="/dev/performance/endpoints"
-                class="text-gray-600 hover:text-gray-900 transition"
-              >
+            <div class="picasso-nav-links">
+              <a href="/dev/performance/endpoints" class="picasso-nav-link">
                 Endpoints
               </a>
-              <a
-                href="/dev/performance/queries"
-                class="text-gray-600 hover:text-gray-900 transition"
-              >
+              <a href="/dev/performance/queries" class="picasso-nav-link">
                 Queries
               </a>
-              <a href="/dev/dashboard" class="text-gray-600 hover:text-gray-900 transition">
+              <a href="/dev/performance/errors" class="picasso-nav-link">
+                Errors
+              </a>
+              <a href="/dev/performance/metrics" class="picasso-nav-link">
+                Metrics
+              </a>
+              <a href="/dev/performance/events" class="picasso-nav-link">
+                Events
+              </a>
+              <a href="/dev/dashboard" class="picasso-nav-link">
                 LiveDashboard
               </a>
             </div>

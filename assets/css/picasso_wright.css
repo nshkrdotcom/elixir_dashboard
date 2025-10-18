@@ -1,0 +1,970 @@
+/*
+ * Picasso x Frank Lloyd Wright Design System
+ * Combining Picasso's bold color periods with Wright's organic architecture
+ */
+
+:root {
+  /* Picasso Blue Period */
+  --picasso-deep-blue: #0A1128;
+  --picasso-midnight: #1E3A5F;
+  --picasso-azure: #4A7BA7;
+
+  /* Picasso Rose Period */
+  --picasso-rose: #E8AEB7;
+  --picasso-crimson: #C85A6E;
+  --picasso-burgundy: #B54F6D;
+
+  /* Picasso Cubist Earth Tones */
+  --picasso-sand: #D4A373;
+  --picasso-umber: #8B6F47;
+  --picasso-ochre: #A67B5B;
+
+  /* Bold Accents */
+  --picasso-gold: #F4E285;
+  --picasso-red: #E63946;
+  --picasso-mint: #06FFA5;
+
+  /* Wright Prairie Palette */
+  --wright-prairie: #8B7355;
+  --wright-terracotta: #C97064;
+  --wright-sage: #8FA998;
+  --wright-copper: #B87333;
+
+  /* Gradients */
+  --gradient-cubist: linear-gradient(135deg, var(--picasso-sand) 0%, var(--picasso-umber) 50%, var(--picasso-ochre) 100%);
+  --gradient-blue: linear-gradient(135deg, var(--picasso-deep-blue) 0%, var(--picasso-midnight) 50%, var(--picasso-azure) 100%);
+  --gradient-rose: linear-gradient(135deg, var(--picasso-rose) 0%, var(--picasso-crimson) 50%, var(--picasso-burgundy) 100%);
+}
+
+/* Wright-inspired base layout with strong horizontals */
+body {
+  background: linear-gradient(to bottom, var(--picasso-deep-blue) 0%, var(--picasso-midnight) 100%);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Wright's horizontal emphasis with geometric grid */
+.wright-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+}
+
+/* Horizontal bands - signature Wright element */
+.horizontal-band {
+  height: 4px;
+  background: var(--gradient-cubist);
+  width: 100%;
+  margin: 1.5rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.horizontal-band-thin {
+  height: 2px;
+  background: var(--picasso-gold);
+  opacity: 0.6;
+}
+
+/* Main card with Wright's layered depth */
+.picasso-card {
+  background: linear-gradient(165deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(232, 174, 183, 0.15) 50%,
+    rgba(255, 255, 255, 0.98) 100%);
+  border-radius: 0;
+  box-shadow:
+    0 0 0 3px var(--picasso-umber),
+    0 0 0 6px var(--picasso-sand),
+    0 20px 60px rgba(10, 17, 40, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Wright geometric corner ornaments */
+.picasso-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  background:
+    linear-gradient(45deg, var(--picasso-gold) 0%, transparent 50%),
+    linear-gradient(135deg, var(--picasso-umber) 0%, transparent 50%);
+  opacity: 0.4;
+}
+
+.picasso-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  background:
+    linear-gradient(225deg, var(--picasso-gold) 0%, transparent 50%),
+    linear-gradient(315deg, var(--picasso-umber) 0%, transparent 50%);
+  opacity: 0.4;
+}
+
+/* Cubist-inspired geometric pattern overlay */
+.cubist-pattern {
+  position: relative;
+  background-image:
+    linear-gradient(45deg, transparent 48%, var(--picasso-gold) 49%, var(--picasso-gold) 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, var(--picasso-sand) 49%, var(--picasso-sand) 51%, transparent 52%);
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px;
+  opacity: 0.03;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+/* Typography - Bold like Picasso, structured like Wright */
+.picasso-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: var(--gradient-blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem 0;
+  position: relative;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.picasso-subtitle {
+  font-size: 1.25rem;
+  color: var(--picasso-midnight);
+  font-weight: 400;
+  margin: 0 0 2rem 0;
+  letter-spacing: 0.02em;
+}
+
+/* Wright-inspired horizontal button strips */
+.wright-button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 3px solid var(--picasso-umber);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Picasso color-blocked buttons */
+.picasso-btn {
+  padding: 1.25rem 2rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  border: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.picasso-btn:last-child {
+  border-bottom: none;
+}
+
+/* Blue Period button */
+.picasso-btn-blue {
+  background: var(--gradient-blue);
+  color: white;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.picasso-btn-blue:hover {
+  transform: translateX(8px);
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.3),
+    -8px 0 0 var(--picasso-gold);
+}
+
+/* Rose Period button */
+.picasso-btn-rose {
+  background: var(--gradient-rose);
+  color: white;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.picasso-btn-rose:hover {
+  transform: translateX(8px);
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.3),
+    -8px 0 0 var(--picasso-gold);
+}
+
+/* Cubist button */
+.picasso-btn-cubist {
+  background: var(--gradient-cubist);
+  color: var(--picasso-deep-blue);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.15);
+}
+
+.picasso-btn-cubist:hover {
+  transform: translateX(8px);
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.25),
+    -8px 0 0 var(--picasso-mint);
+}
+
+/* Accent buttons */
+.picasso-btn-red {
+  background: linear-gradient(135deg, #E63946 0%, #C41E3A 100%);
+  color: white;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.picasso-btn-red:hover {
+  transform: translateX(8px);
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.3),
+    -8px 0 0 var(--picasso-gold);
+}
+
+.picasso-btn-sage {
+  background: linear-gradient(135deg, #8FA998 0%, #6B8E7F 100%);
+  color: white;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.picasso-btn-sage:hover {
+  transform: translateX(8px);
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.3),
+    -8px 0 0 var(--picasso-gold);
+}
+
+.picasso-btn-copper {
+  background: linear-gradient(135deg, #B87333 0%, #8B5A2B 100%);
+  color: white;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.picasso-btn-copper:hover {
+  transform: translateX(8px);
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.3),
+    -8px 0 0 var(--picasso-gold);
+}
+
+/* Wright-inspired info panels */
+.wright-panel {
+  background: linear-gradient(135deg,
+    rgba(212, 163, 115, 0.1) 0%,
+    rgba(139, 111, 71, 0.05) 100%);
+  border-left: 6px solid var(--picasso-umber);
+  border-right: 6px solid var(--picasso-sand);
+  padding: 2rem;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.wright-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-cubist);
+}
+
+.wright-panel::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-cubist);
+}
+
+.wright-panel h2 {
+  color: var(--picasso-midnight);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wright-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.wright-panel ul li {
+  padding: 0.5rem 0 0.5rem 2rem;
+  color: #FFFFFF;
+  font-weight: 500;
+  position: relative;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.wright-panel ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background: var(--picasso-mint);
+  border: 2px solid var(--picasso-gold);
+  transform: translateY(-50%) rotate(45deg);
+  box-shadow: 0 2px 6px rgba(6, 255, 165, 0.4);
+}
+
+/* Geometric grid for test endpoints */
+.wright-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg,
+    rgba(74, 123, 167, 0.08) 0%,
+    rgba(30, 58, 95, 0.12) 100%);
+  border: 2px solid var(--picasso-azure);
+  position: relative;
+}
+
+.wright-grid::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient-blue);
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.wright-grid a {
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--picasso-azure);
+  text-decoration: none;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  border: 2px solid var(--picasso-azure);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.wright-grid a:hover {
+  background: var(--picasso-azure);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 123, 167, 0.4);
+}
+
+/* Code block styling */
+.wright-code {
+  background: var(--picasso-deep-blue);
+  color: var(--picasso-gold);
+  padding: 1.5rem;
+  border-radius: 0;
+  border: 3px solid var(--picasso-umber);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.wright-code div {
+  padding: 0.25rem 0;
+  border-left: 3px solid transparent;
+  padding-left: 1rem;
+  transition: all 0.2s ease;
+}
+
+.wright-code div:hover {
+  border-left-color: var(--picasso-mint);
+  background: rgba(6, 255, 165, 0.05);
+}
+
+/* Demo banner - Picasso's bold announcements */
+.picasso-banner {
+  background: var(--gradient-rose);
+  padding: 1.5rem;
+  color: white;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 24px rgba(200, 90, 110, 0.4);
+  border: 3px solid var(--picasso-burgundy);
+  position: relative;
+  overflow: hidden;
+}
+
+.picasso-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.picasso-banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.picasso-banner-icon {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 1rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.picasso-banner-title {
+  font-weight: 900;
+  font-size: 1.25rem;
+  margin: 0 0 0.25rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.picasso-banner-text {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  margin: 0;
+}
+
+.picasso-badge {
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Badge elements */
+.picasso-new-badge {
+  background: var(--picasso-red);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+  margin-left: 0.75rem;
+  box-shadow: 0 2px 4px rgba(230, 57, 70, 0.4);
+  display: inline-block;
+}
+
+/* Section headers */
+.picasso-section-header {
+  color: var(--picasso-midnight);
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 2rem 0 1.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.picasso-section-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100px;
+  height: 4px;
+  background: var(--gradient-cubist);
+}
+
+/* Responsive Wright grid */
+@media (max-width: 768px) {
+  .wright-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .picasso-title {
+    font-size: 2.5rem;
+  }
+
+  .wright-container {
+    padding: 1rem;
+  }
+
+  .picasso-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* Table styles for endpoints */
+.picasso-table-container {
+  overflow-x: auto;
+  border: 3px solid var(--picasso-umber);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.picasso-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.picasso-table thead {
+  background: var(--gradient-cubist);
+}
+
+.picasso-table thead tr {
+  border-bottom: 3px solid var(--picasso-umber);
+}
+
+.picasso-table th {
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.picasso-table tbody tr {
+  border-bottom: 2px solid var(--picasso-sand);
+  transition: all 0.2s ease;
+}
+
+.picasso-table tbody tr:hover {
+  background: linear-gradient(90deg,
+    rgba(244, 226, 133, 0.15) 0%,
+    rgba(212, 163, 115, 0.1) 100%);
+  transform: translateX(4px);
+}
+
+.picasso-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.picasso-table td {
+  padding: 1rem 1.5rem;
+  color: var(--picasso-midnight);
+  font-size: 0.95rem;
+}
+
+.picasso-duration-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  font-size: 1.1rem;
+  border-radius: 2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.duration-critical {
+  background: linear-gradient(135deg, #E63946 0%, #C41E3A 100%);
+  color: white;
+  border: 2px solid #8B0000;
+}
+
+.duration-high {
+  background: linear-gradient(135deg, #FF6B35 0%, #F77F00 100%);
+  color: white;
+  border: 2px solid #C85A00;
+}
+
+.duration-medium {
+  background: linear-gradient(135deg, #F4E285 0%, #E6C84E 100%);
+  color: var(--picasso-deep-blue);
+  border: 2px solid #B89B2E;
+}
+
+.duration-low {
+  background: linear-gradient(135deg, #06FFA5 0%, #00CC7E 100%);
+  color: var(--picasso-deep-blue);
+  border: 2px solid #008F5A;
+}
+
+.picasso-code-cell {
+  font-family: 'Courier New', monospace;
+  color: var(--picasso-azure);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.picasso-timestamp {
+  color: var(--picasso-umber);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Query card styles */
+.picasso-query-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.picasso-query-card {
+  background: white;
+  border: 3px solid var(--picasso-umber);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.picasso-query-card:hover {
+  transform: translateX(6px);
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.35),
+    -6px 0 0 var(--picasso-gold);
+}
+
+.picasso-query-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-cubist);
+}
+
+.picasso-query-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--picasso-sand);
+}
+
+.picasso-query-endpoint {
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+}
+
+.picasso-code-inline {
+  font-family: 'Courier New', monospace;
+  color: var(--picasso-azure);
+  font-weight: 700;
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(74, 123, 167, 0.1);
+  border-radius: 2px;
+}
+
+.picasso-sql-block {
+  background: var(--picasso-deep-blue);
+  border: 2px solid var(--picasso-midnight);
+  padding: 1.25rem;
+  margin: 1rem 0;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.picasso-sql-label {
+  color: var(--picasso-gold);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.picasso-sql-code {
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--picasso-mint);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.picasso-params-block {
+  background: linear-gradient(135deg,
+    rgba(74, 123, 167, 0.15) 0%,
+    rgba(30, 58, 95, 0.1) 100%);
+  border: 2px solid var(--picasso-azure);
+  padding: 1.25rem;
+  margin-top: 1rem;
+}
+
+.picasso-params-label {
+  color: var(--picasso-azure);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.picasso-params-code {
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--picasso-midnight);
+  font-weight: 600;
+}
+
+/* Picasso Navigation Bar */
+.picasso-nav {
+  background: var(--gradient-cubist);
+  border-bottom: 4px solid var(--picasso-umber);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.picasso-nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.picasso-nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.picasso-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.picasso-nav-brand {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.picasso-nav-brand:hover {
+  color: var(--picasso-gold);
+  transform: translateY(-2px);
+}
+
+.picasso-nav-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.picasso-nav-link {
+  padding: 0.75rem 1.25rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+}
+
+.picasso-nav-link:hover {
+  background: var(--picasso-azure);
+  border-color: var(--picasso-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive nav */
+@media (max-width: 768px) {
+  .picasso-nav-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .picasso-nav-links {
+    width: 100%;
+  }
+
+  .picasso-nav-link {
+    flex: 1;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+/* Picasso Sub-Navigation (Performance Pages) */
+.picasso-subnav {
+  background: linear-gradient(135deg, var(--picasso-midnight) 0%, var(--picasso-deep-blue) 100%);
+  border-bottom: 3px solid var(--picasso-gold);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-bottom: 0;
+}
+
+.picasso-subnav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.picasso-subnav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  min-height: 4rem;
+}
+
+.picasso-subnav-links {
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.picasso-subnav-link {
+  padding: 1.25rem 2rem;
+  color: var(--picasso-rose);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  border-bottom: 4px solid transparent;
+  background: transparent;
+  position: relative;
+}
+
+.picasso-subnav-link:hover {
+  background: rgba(74, 123, 167, 0.2);
+  color: white;
+  border-bottom-color: var(--picasso-gold);
+}
+
+.picasso-subnav-link-active {
+  background: var(--picasso-azure);
+  color: white;
+  border-bottom-color: var(--picasso-gold);
+  box-shadow: inset 0 -4px 0 var(--picasso-gold);
+}
+
+.picasso-subnav-link-active:hover {
+  background: var(--picasso-azure);
+}
+
+.picasso-subnav-home {
+  padding: 0 1rem;
+}
+
+.picasso-subnav-home-link {
+  color: var(--picasso-gold);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--picasso-gold);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.picasso-subnav-home-link:hover {
+  background: var(--picasso-gold);
+  color: var(--picasso-deep-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(244, 226, 133, 0.4);
+}
+
+/* Responsive subnav */
+@media (max-width: 768px) {
+  .picasso-subnav-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .picasso-subnav-links {
+    width: 100%;
+  }
+
+  .picasso-subnav-link {
+    flex: 1;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 1rem;
+  }
+
+  .picasso-subnav-home {
+    padding: 1rem;
+    text-align: center;
+  }
+}
+
+/* Accessibility */
+.picasso-btn:focus,
+.wright-grid a:focus,
+.picasso-nav-link:focus {
+  outline: 3px solid var(--picasso-gold);
+  outline-offset: 3px;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}

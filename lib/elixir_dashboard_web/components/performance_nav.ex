@@ -16,29 +16,29 @@ defmodule ElixirDashboardWeb.Components.PerformanceNav do
 
   def performance_nav(assigns) do
     ~H"""
-    <nav class="bg-gray-800 mb-6">
-      <div class="container mx-auto px-6">
-        <div class="flex items-center justify-between h-16">
-          <div class="flex items-center space-x-1">
+    <nav class="picasso-subnav">
+      <div class="picasso-subnav-container">
+        <div class="picasso-subnav-content">
+          <div class="picasso-subnav-links">
             <.nav_link href="/dev/performance/endpoints" active={@current_page == :endpoints}>
-              📊 Endpoints
+              Endpoints
             </.nav_link>
             <.nav_link href="/dev/performance/queries" active={@current_page == :queries}>
-              🔍 Queries
+              Queries
             </.nav_link>
             <.nav_link href="/dev/performance/errors" active={@current_page == :errors}>
-              ❌ Errors
+              Errors
             </.nav_link>
             <.nav_link href="/dev/performance/metrics" active={@current_page == :metrics}>
-              📈 Metrics
+              Metrics
             </.nav_link>
             <.nav_link href="/dev/performance/events" active={@current_page == :events}>
-              🎉 Events
+              Events
             </.nav_link>
           </div>
-          <div class="text-gray-300 text-sm">
-            <a href="/" class="hover:text-white transition">
-              ← Home
+          <div class="picasso-subnav-home">
+            <a href="/" class="picasso-subnav-home-link">
+              Home
             </a>
           </div>
         </div>
@@ -56,11 +56,8 @@ defmodule ElixirDashboardWeb.Components.PerformanceNav do
     <a
       href={@href}
       class={[
-        "px-4 py-2 rounded-md text-sm font-medium transition",
-        if(@active,
-          do: "bg-gray-900 text-white",
-          else: "text-gray-300 hover:bg-gray-700 hover:text-white"
-        )
+        "picasso-subnav-link",
+        if(@active, do: "picasso-subnav-link-active", else: "")
       ]}
     >
       <%= render_slot(@inner_block) %>
