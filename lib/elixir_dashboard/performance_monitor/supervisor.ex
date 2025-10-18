@@ -18,7 +18,7 @@ defmodule ElixirDashboard.PerformanceMonitor.Supervisor do
   @impl true
   def init(_init_arg) do
     children = [
-      ElixirDashboard.PerformanceMonitor.Store
+      ElixirDashboard.PerformanceMonitor.DetsStore
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
