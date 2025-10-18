@@ -13,7 +13,7 @@ defmodule Mix.Tasks.Dashboard.Stats do
 
   @impl Mix.Task
   def run(_args) do
-    Mix.Task.run("app.start")
+    Mix.Task.run("app.start", [])
 
     stats = ElixirDashboard.PerformanceMonitor.Store.get_stats()
     endpoints = ElixirDashboard.PerformanceMonitor.Store.get_slow_endpoints()
@@ -79,7 +79,7 @@ defmodule Mix.Tasks.Dashboard.Clear do
 
   @impl Mix.Task
   def run(_args) do
-    Mix.Task.run("app.start")
+    Mix.Task.run("app.start", [])
 
     ElixirDashboard.PerformanceMonitor.Store.clear_all()
     IO.puts(IO.ANSI.green() <> "✓ Dashboard data cleared" <> IO.ANSI.reset())
@@ -103,7 +103,7 @@ defmodule Mix.Tasks.Dashboard.SlowQuery do
 
   @impl Mix.Task
   def run(args) do
-    Mix.Task.run("app.start")
+    Mix.Task.run("app.start", [])
 
     seconds =
       case args do
@@ -144,7 +144,7 @@ defmodule Mix.Tasks.Dashboard.SlowEndpoint do
 
   @impl Mix.Task
   def run(args) do
-    Mix.Task.run("app.start")
+    Mix.Task.run("app.start", [])
 
     ms =
       case args do
