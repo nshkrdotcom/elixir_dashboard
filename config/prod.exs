@@ -1,5 +1,8 @@
 import Config
 
+# Set the environment
+config :elixir_dashboard, :env, :prod
+
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
 # when generating URLs.

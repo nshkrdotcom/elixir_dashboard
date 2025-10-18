@@ -112,7 +112,8 @@ defmodule ElixirDashboard.MixProject do
         "INTEGRATION_GUIDE.md",
         "LIBRARY_USAGE.md",
         "SETUP.md",
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "LICENSE"
       ],
       groups_for_extras: [
         "Getting Started": ["README.md", "INTEGRATION_GUIDE.md"],

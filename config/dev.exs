@@ -1,5 +1,8 @@
 import Config
 
+# Set the environment
+config :elixir_dashboard, :env, :dev
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 config :elixir_dashboard, ElixirDashboardWeb.Endpoint,

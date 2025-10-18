@@ -14,7 +14,7 @@ defmodule ElixirDashboard.Application do
     ]
 
     # Attach telemetry handlers only in dev
-    if Mix.env() == :dev do
+    if Application.get_env(:elixir_dashboard, :env) == :dev do
       ElixirDashboardWeb.PerformanceMonitor.TelemetryHandler.attach()
     end
 
