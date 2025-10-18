@@ -35,9 +35,9 @@ defmodule ElixirDashboard.Application do
     :ok
   end
 
-  # Only start Repo in dev/test for demo purposes
+  # Only start Repo in dev for demo purposes (not in test - tests don't need DB)
   defp repo_children do
-    if Application.get_env(:elixir_dashboard, :env) in [:dev, :test] do
+    if Application.get_env(:elixir_dashboard, :env) == :dev do
       [ElixirDashboardWeb.Repo]
     else
       []
