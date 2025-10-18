@@ -3,7 +3,7 @@
 
 echo ""
 echo "╔═══════════════════════════════════════════════════════════════╗"
-echo "║                   ElixirDashboard v0.1.0                      ║"
+echo "║                   ElixirDashboard v0.2.0                      ║"
 echo "║               Performance Monitoring Demo Mode                ║"
 echo "╚═══════════════════════════════════════════════════════════════╝"
 echo ""

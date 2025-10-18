@@ -31,10 +31,12 @@ defmodule ElixirDashboard.PerformanceLive.Queries do
 
   @impl true
   def render(assigns) do
+    assigns = assign(assigns, :app_name, app_name())
+
     ~H"""
     <div class="container mx-auto p-6">
       <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Slow SQL Queries</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">{@app_name} - Slow SQL Queries</h1>
         <p class="text-sm text-gray-600 mb-4">
           Showing the 100 slowest queries recorded since the server started (threshold: 50ms).
         </p>
@@ -106,4 +108,8 @@ defmodule ElixirDashboard.PerformanceLive.Queries do
   defp duration_color(ms) when ms > 200, do: "text-orange-600"
   defp duration_color(ms) when ms > 100, do: "text-yellow-600"
   defp duration_color(_), do: "text-green-600"
+
+  defp app_name do
+    Application.get_env(:elixir_dashboard, :app_name, "ElixirDashboard")
+  end
 end

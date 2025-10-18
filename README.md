@@ -31,7 +31,7 @@ Add to your Phoenix application in 3 simple steps:
 # mix.exs
 def deps do
   [
-    {:elixir_dashboard, "~> 0.1.0"}
+    {:elixir_dashboard, "~> 0.2.0"}
   ]
 end
 ```
@@ -86,6 +86,8 @@ end
 ```elixir
 # config/dev.exs
 config :elixir_dashboard,
+  # Application name shown in UI (default: "ElixirDashboard")
+  app_name: "MyApp Dashboard",
   # Maximum items to keep in memory (default: 100)
   max_items: 100,
   # Endpoint threshold in milliseconds (default: 100)
@@ -99,6 +101,11 @@ config :elixir_dashboard,
 ```
 
 **Important:** Set `repo_prefixes` to match your Ecto repo module name.
+
+The `app_name` will appear in:
+- Page titles (browser tab)
+- Navigation bar
+- Dashboard headers
 
 That's it! Visit `http://localhost:4000/dev/performance/endpoints` 🎉
 
@@ -298,6 +305,7 @@ All settings are optional with sensible defaults:
 
 | Option | Default | Description |
 |--------|---------|-------------|
+| `app_name` | `"ElixirDashboard"` | Application name displayed in UI (nav, titles, headers) |
 | `max_items` | `100` | Maximum items to keep in memory per category |
 | `endpoint_threshold_ms` | `100` | Only capture endpoints slower than this (ms) |
 | `query_threshold_ms` | `50` | Only capture queries slower than this (ms) |

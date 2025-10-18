@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Elixir Dashboard">
+    <.live_title suffix={" · #{app_name()}"}>
       <%= assigns[:page_title] || "Performance Monitor" %>
     </.live_title>
     <script src="https://cdn.tailwindcss.com">
@@ -23,7 +23,7 @@
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-8">
             <a href="/" class="text-xl font-bold text-gray-900">
-              Elixir Dashboard
+              <%= app_name() %>
             </a>
             <div class="hidden md:flex space-x-4">
               <a
