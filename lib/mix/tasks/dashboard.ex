@@ -234,3 +234,71 @@ defmodule Mix.Tasks.Dashboard.Test do
     IO.puts("  http://localhost:4000/dev/performance/queries")
   end
 end
+
+defmodule Mix.Tasks.Dashboard.Fixtures do
+  @moduledoc """
+  Generate fixture data for all ElixirTracer dashboards.
+
+  ## Usage
+
+      # Generate all fixtures with defaults
+      mix dashboard.fixtures
+
+      # Generate with custom counts
+      mix dashboard.fixtures --errors 10 --events 20
+
+  ## Options
+
+    * `--errors` - Number of error traces to generate (default: 5)
+    * `--events` - Number of custom events to generate (default: 10)
+    * Metrics are always generated comprehensively
+
+  This will populate:
+    - Errors dashboard with realistic exception traces
+    - Metrics dashboard with database and external service metrics
+    - Events dashboard with business events (signups, purchases, etc.)
+  """
+  @shortdoc "Generate fixture data for errors, metrics, and events"
+
+  use Mix.Task
+
+  @impl Mix.Task
+  def run(args) do
+    Mix.Task.run("app.start", [])
+
+    {opts, _, _} =
+      OptionParser.parse(args,
+        strict: [errors: :integer, events: :integer],
+        aliases: [e: :errors, v: :events]
+      )
+
+    error_count = Keyword.get(opts, :errors, 5)
+    event_count = Keyword.get(opts, :events, 10)
+
+    IO.puts(IO.ANSI.cyan() <> "\n📊 Generating fixture data..." <> IO.ANSI.reset())
+    IO.puts("")
+
+    # Generate errors
+    IO.puts(IO.ANSI.yellow() <> "Generating #{error_count} error traces..." <> IO.ANSI.reset())
+    ElixirDashboard.Fixtures.generate_errors(error_count)
+    IO.puts(IO.ANSI.green() <> "  ✓ #{error_count} errors generated" <> IO.ANSI.reset())
+
+    # Generate metrics
+    IO.puts(IO.ANSI.yellow() <> "\nGenerating performance metrics..." <> IO.ANSI.reset())
+    ElixirDashboard.Fixtures.generate_metrics()
+    IO.puts(IO.ANSI.green() <> "  ✓ Database metrics generated" <> IO.ANSI.reset())
+    IO.puts(IO.ANSI.green() <> "  ✓ External service metrics generated" <> IO.ANSI.reset())
+    IO.puts(IO.ANSI.green() <> "  ✓ Custom metrics generated" <> IO.ANSI.reset())
+
+    # Generate events
+    IO.puts(IO.ANSI.yellow() <> "\nGenerating #{event_count} custom events..." <> IO.ANSI.reset())
+    ElixirDashboard.Fixtures.generate_events(event_count)
+    IO.puts(IO.ANSI.green() <> "  ✓ #{event_count} events generated" <> IO.ANSI.reset())
+
+    IO.puts(IO.ANSI.cyan() <> "\n✨ Fixture generation complete!" <> IO.ANSI.reset())
+    IO.puts("\nView the data in your dashboards:")
+    IO.puts("  http://localhost:4000/dev/performance/errors")
+    IO.puts("  http://localhost:4000/dev/performance/metrics")
+    IO.puts("  http://localhost:4000/dev/performance/events")
+  end
+end

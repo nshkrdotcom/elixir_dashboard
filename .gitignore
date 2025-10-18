@@ -37,3 +37,5 @@ npm-debug.log
 
 # Ignore DETS runtime storage files (user-generated performance data)
 /priv/dets/*.dets
+
+/elixir_tracer/

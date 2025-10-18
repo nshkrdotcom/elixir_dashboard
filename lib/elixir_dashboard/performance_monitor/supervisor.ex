@@ -18,7 +18,8 @@ defmodule ElixirDashboard.PerformanceMonitor.Supervisor do
   @impl true
   def init(_init_arg) do
     children = [
-      ElixirDashboard.PerformanceMonitor.DetsStore
+      # Start the configured storage backend (TracerStore or DetsStore)
+      ElixirDashboard.PerformanceMonitor.Store
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

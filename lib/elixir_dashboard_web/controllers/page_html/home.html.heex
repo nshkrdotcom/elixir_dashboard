@@ -40,27 +40,55 @@
             Performance monitoring for your Phoenix application
           </p>
 
-          <div class="space-y-4">
+          <div class="space-y-3">
+            <h2 class="text-lg font-semibold text-gray-900 mb-3">📊 Performance Dashboards</h2>
+
             <a
               href="/dev/performance/endpoints"
               class="block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
             >
-              View Slow Endpoints
+              📊 Slow Endpoints
             </a>
 
             <a
               href="/dev/performance/queries"
               class="block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
             >
-              View Slow Queries
+              🔍 Slow Queries
             </a>
 
             <a
-              href="/dev/dashboard"
+              href="/dev/performance/errors"
+              class="block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
+            >
+              ❌ Error Traces
+              <span class="ml-2 text-xs bg-red-500 px-2 py-1 rounded">NEW</span>
+            </a>
+
+            <a
+              href="/dev/performance/metrics"
+              class="block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
+            >
+              📈 Performance Metrics
+              <span class="ml-2 text-xs bg-indigo-500 px-2 py-1 rounded">NEW</span>
+            </a>
+
+            <a
+              href="/dev/performance/events"
               class="block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
             >
-              Phoenix LiveDashboard
+              🎉 Custom Events
+              <span class="ml-2 text-xs bg-purple-500 px-2 py-1 rounded">NEW</span>
             </a>
+
+            <div class="pt-3 border-t border-gray-200">
+              <a
+                href="/dev/dashboard"
+                class="block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition text-center"
+              >
+                Phoenix LiveDashboard
+              </a>
+            </div>
           </div>
 
           <div class="mt-8 pt-6 border-t border-gray-200">
@@ -68,7 +96,10 @@
             <ul class="list-disc list-inside text-gray-600 space-y-1">
               <li>Real-time monitoring of slow API endpoints (>100ms)</li>
               <li>Track slow SQL queries (>50ms)</li>
-              <li>Correlate queries with their originating endpoints</li>
+              <li>Error traces with full stack traces & context</li>
+              <li>Aggregated performance metrics (DB, external, custom)</li>
+              <li>Custom business events tracking</li>
+              <li>Powered by ElixirTracer - local-first observability</li>
               <li>Auto-refresh every 5 seconds</li>
               <li>DETS-based persistent storage (survives restarts)</li>
             </ul>
@@ -103,9 +134,10 @@
               </a>
             </div>
             <div class="mt-3 p-3 bg-gray-50 rounded text-xs font-mono text-gray-700">
-              <div>$ mix dashboard.test 20  # Generate 20 test requests</div>
-              <div>$ mix dashboard.stats    # View statistics</div>
-              <div>$ mix dashboard.clear    # Clear all data</div>
+              <div>$ mix dashboard.test 20      # Generate test endpoints/queries</div>
+              <div>$ mix dashboard.fixtures    # Generate errors/metrics/events</div>
+              <div>$ mix dashboard.stats       # View statistics</div>
+              <div>$ mix dashboard.clear       # Clear all data</div>
             </div>
           </div>
         </div>

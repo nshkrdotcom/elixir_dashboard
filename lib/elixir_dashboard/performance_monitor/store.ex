@@ -1,43 +1,80 @@
 defmodule ElixirDashboard.PerformanceMonitor.Store do
   @moduledoc """
-  Storage facade that delegates to DETS-based persistent storage.
+  Storage facade that delegates to the configured storage backend.
 
-  In dev/test: Uses DETS for persistence (data survives restarts)
-  In prod: Uses in-memory storage (ephemeral)
+  Supports two backends:
+  - **TracerStore** (default): Uses ElixirTracer for comprehensive observability
+  - **DetsStore** (legacy): Simple DETS-based storage
 
   Configuration:
 
-      config :elixir_dashboard, :max_items, 100
+      config :elixir_dashboard,
+        max_items: 100,
+        storage_backend: :tracer  # or :dets for legacy
+
+  ## Storage Backends
+
+  ### TracerStore (ElixirTracer)
+  - Rich transaction and span data
+  - Error tracking and correlation
+  - Metrics aggregation
+  - Distributed tracing support
+  - New Relic API compatible
+
+  ### DetsStore (Legacy)
+  - Simple endpoint/query tracking
+  - Minimal dependencies
+  - Backward compatible
   """
 
-  alias ElixirDashboard.PerformanceMonitor.DetsStore
+  alias ElixirDashboard.PerformanceMonitor.{DetsStore, TracerStore}
 
-  # Client API - delegates to DETS
+  # Client API - delegates to configured backend
+
+  def child_spec(opts) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [opts]},
+      type: :worker,
+      restart: :permanent
+    }
+  end
+
   def start_link(opts) do
-    DetsStore.start_link(opts)
+    backend_module().start_link(opts)
   end
 
   def add_slow_endpoint(endpoint_data) do
-    DetsStore.add_slow_endpoint(endpoint_data)
+    backend_module().add_slow_endpoint(endpoint_data)
   end
 
   def add_slow_query(query_data) do
-    DetsStore.add_slow_query(query_data)
+    backend_module().add_slow_query(query_data)
   end
 
   def get_slow_endpoints do
-    DetsStore.get_slow_endpoints()
+    backend_module().get_slow_endpoints()
   end
 
   def get_slow_queries do
-    DetsStore.get_slow_queries()
+    backend_module().get_slow_queries()
   end
 
   def clear_all do
-    DetsStore.clear_all()
+    backend_module().clear_all()
   end
 
   def get_stats do
-    DetsStore.get_stats()
+    backend_module().get_stats()
+  end
+
+  # Private
+
+  defp backend_module do
+    case Application.get_env(:elixir_dashboard, :storage_backend, :tracer) do
+      :tracer -> TracerStore
+      :dets -> DetsStore
+      other -> raise "Unknown storage backend: #{inspect(other)}"
+    end
   end
 end

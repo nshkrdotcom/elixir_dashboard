@@ -19,9 +19,10 @@ ElixirDashboard is a lightweight, zero-configuration monitoring tool that helps 
 - 🎯 **Dual Purpose** - Use as a library in your app OR run standalone
 - 🔍 **Request Correlation** - See which endpoints triggered slow queries
 - 🎨 **Color-coded Metrics** - Visual performance indicators
-- ⚡ **Lightweight** - Minimal dependencies, in-memory storage
+- ⚡ **Lightweight** - Minimal dependencies, persistent DETS storage
 - 🛡️ **Development-Only** - Automatically disabled in production
 - 🔧 **Fully Configurable** - Customize thresholds, limits, and intervals
+- 🔬 **ElixirTracer Integration** - Comprehensive observability with transactions, spans, errors, metrics, and events
 
 ## Quick Start
 
@@ -264,6 +265,7 @@ Track your slowest HTTP endpoints with real-time updates:
 
 - Duration in milliseconds
 - HTTP method and path
+- **NEW with ElixirTracer**: Transaction status, error count, trace IDs, custom attributes
 - Timestamp
 - Color-coded severity (green → yellow → orange → red)
 - Auto-refresh every 5 seconds
@@ -276,9 +278,39 @@ Monitor database performance:
 - Query duration
 - Full SQL text
 - Query parameters
+- **NEW with ElixirTracer**: DB operation type, table name, database instance, span IDs
 - Originating endpoint (request correlation)
 - Timestamp
 - Color-coded severity
+
+### NEW: Errors Dashboard (`/dev/performance/errors`)
+
+Track all exceptions with full context:
+
+- Error type and message
+- Full stack traces
+- Transaction correlation
+- Custom attributes
+- Statistics and frequency analysis
+
+### NEW: Metrics Dashboard (`/dev/performance/metrics`)
+
+View aggregated performance data:
+
+- Database metrics by table/operation
+- External service call statistics
+- Custom application metrics
+- Call counts, min/max/avg durations
+- Filterable by category
+
+### NEW: Custom Events Dashboard (`/dev/performance/events`)
+
+Monitor business events:
+
+- User signups, purchases, feature usage
+- Custom application events
+- Event attributes and payloads
+- Time-based statistics
 
 ## How It Works
 
@@ -354,6 +386,7 @@ ElixirDashboard.PerformanceMonitor.detach()   # Stop monitoring
 
 ## Documentation
 
+- **[ElixirTracer Integration](ELIXIR_TRACER_INTEGRATION.md)** - Complete guide to ElixirTracer features
 - **[Integration Guide](INTEGRATION_GUIDE.md)** - Step-by-step integration instructions
 - **[Library Usage](LIBRARY_USAGE.md)** - Understanding the dual-purpose architecture
 - **[Setup Guide](SETUP.md)** - Detailed configuration and troubleshooting

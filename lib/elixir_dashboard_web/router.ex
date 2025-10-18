@@ -40,6 +40,9 @@ defmodule ElixirDashboardWeb.Router do
 
       live "/endpoints", ElixirDashboard.PerformanceLive.Endpoints, :index
       live "/queries", ElixirDashboard.PerformanceLive.Queries, :index
+      live "/errors", ElixirDashboard.PerformanceLive.Errors, :index
+      live "/metrics", ElixirDashboard.PerformanceLive.Metrics, :index
+      live "/events", ElixirDashboard.PerformanceLive.Events, :index
     end
   end
 

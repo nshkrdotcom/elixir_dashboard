@@ -16,9 +16,39 @@ config :elixir_dashboard, ElixirDashboardWeb.Repo,
 # Configure Ecto repos
 config :elixir_dashboard, ecto_repos: [ElixirDashboardWeb.Repo]
 
-# Configure repo telemetry prefix for monitoring
+# Configure ElixirDashboard performance monitoring
 config :elixir_dashboard,
+  # Application name shown in UI
+  app_name: "ElixirDashboard",
+  # Storage backend: :tracer (ElixirTracer) or :dets (legacy)
+  storage_backend: :tracer,
+  # Maximum items to keep in memory
+  max_items: 100,
+  # Endpoint threshold in milliseconds
+  endpoint_threshold_ms: 100,
+  # Query threshold in milliseconds
+  query_threshold_ms: 50,
+  # Auto-refresh interval in milliseconds
+  refresh_interval_ms: 5000,
+  # Ecto repo telemetry prefixes to monitor
   repo_prefixes: [[:elixir_dashboard_web, :repo]]
+
+# Configure ElixirTracer (storage backend for dashboard)
+config :elixir_tracer,
+  # Shared storage path with dashboard
+  storage_path: "priv/dets",
+  # Maximum items per table
+  max_items: %{
+    transactions: 1000,
+    spans: 5000,
+    errors: 500,
+    metrics: 2000,
+    events: 1000
+  },
+  # Collect full SQL queries
+  collect_queries: true,
+  # Collect stack traces for errors
+  collect_stack_traces: true
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

@@ -55,6 +55,7 @@ defmodule ElixirDashboard.MixProject do
       {:phoenix, "~> 1.7.0"},
       {:phoenix_live_view, "~> 0.20.0"},
       {:telemetry, "~> 1.0"},
+      {:elixir_tracer, "~> 0.1.0"},
 
       # Demo/dev app dependencies
       {:phoenix_live_reload, "~> 1.2", only: :dev},
