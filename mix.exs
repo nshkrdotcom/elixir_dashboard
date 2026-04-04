@@ -72,11 +72,11 @@ defmodule ElixirDashboard.MixProject do
       {:postgrex, "~> 0.17", only: [:dev, :test]},
 
       # Development and testing
-      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.40.0", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev], runtime: false},
       {:excoveralls, "~> 0.18", only: :test},
-      {:supertester, "~> 0.2.1", only: :test}
+      {:supertester, "~> 0.5.1", only: :test}
     ]
   end
 
@@ -91,7 +91,7 @@ defmodule ElixirDashboard.MixProject do
       name: "elixir_dashboard",
       description: description(),
       files:
-        ~w(lib .formatter.exs mix.exs README.md INTEGRATION_GUIDE.md SETUP.md LICENSE CHANGELOG.md),
+        ~w(lib assets .formatter.exs mix.exs README.md INTEGRATION_GUIDE.md SETUP.md LICENSE CHANGELOG.md),
       licenses: ["MIT"],
       links: %{
         "GitHub" => @source_url,
@@ -114,6 +114,7 @@ defmodule ElixirDashboard.MixProject do
       source_ref: "v#{@version}",
       source_url: @source_url,
       homepage_url: @source_url,
+      logo: "assets/elixir_dashboard.svg",
       extras: [
         "README.md",
         "INTEGRATION_GUIDE.md",
