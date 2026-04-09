@@ -91,7 +91,7 @@ defmodule ElixirDashboard.MixProject do
       name: "elixir_dashboard",
       description: description(),
       files:
-        ~w(lib assets .formatter.exs mix.exs README.md INTEGRATION_GUIDE.md SETUP.md LICENSE CHANGELOG.md),
+        ~w(lib assets .formatter.exs mix.exs README.md INTEGRATION_GUIDE.md SETUP.md LICENSE CHANGELOG.md LIBRARY_USAGE.md),
       licenses: ["MIT"],
       links: %{
         "GitHub" => @source_url,
